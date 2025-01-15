@@ -1,4 +1,9 @@
-{{ ... }}
+{% comment %}
+  Hero Banner Section
+  ------------------------------------------------------------------------------
+  A full-width banner with image background, heading, text and call-to-action
+{% endcomment %}
+
 <div class="relative bg-gray-900">
   {%- if section.settings.image != blank -%}
     <div class="absolute inset-0">
@@ -29,7 +34,9 @@
 
 {% schema %}
 {
-  "name": "Hero Banner",
+  "name": "Hero banner",
+  "tag": "section",
+  "class": "hero-banner-section",
   "settings": [
     {
       "type": "image_picker",
@@ -62,10 +69,13 @@
   ],
   "presets": [
     {
-      "name": "Hero Banner",
-      "category": "Hero"
+      "name": "Hero banner",
+      "settings": {
+        "title": "Welcome to our store",
+        "text": "<p>Share information about your brand with your customers.</p>",
+        "button_label": "Shop Now"
+      }
     }
   ]
 }
 {% endschema %}
-{{ ... }}

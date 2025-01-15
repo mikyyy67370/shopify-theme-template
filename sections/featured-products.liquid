@@ -1,4 +1,9 @@
-{{ ... }}
+{% comment %}
+  Featured Products Section
+  ------------------------------------------------------------------------------
+  Display a grid of products from a selected collection
+{% endcomment %}
+
 <div class="bg-white">
   <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
     <h2 class="text-2xl font-extrabold text-gray-900 mb-6">
@@ -39,7 +44,9 @@
 
 {% schema %}
 {
-  "name": "Featured Products",
+  "name": "Featured products",
+  "tag": "section",
+  "class": "featured-products-section",
   "settings": [
     {
       "type": "text",
@@ -70,10 +77,12 @@
   ],
   "presets": [
     {
-      "name": "Featured Products",
-      "category": "Collection"
+      "name": "Featured products",
+      "settings": {
+        "products_to_show": 4,
+        "show_view_all": true
+      }
     }
   ]
 }
 {% endschema %}
-{{ ... }}
