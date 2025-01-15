@@ -1,32 +1,166 @@
-<footer class="bg-gray-50">
-  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when 'link_list' -%}
-            <div class="space-y-4">
-              <h3 class="text-sm font-semibold text-gray-900 uppercase">{{ block.settings.title }}</h3>
-              {%- assign menu = block.settings.menu -%}
-              {%- if linklists[menu].links.size > 0 -%}
-                <ul class="space-y-2">
-                  {%- for link in linklists[menu].links -%}
-                    <li>
-                      <a href="{{ link.url }}" class="text-base text-gray-600 hover:text-gray-900">
-                        {{ link.title }}
-                      </a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- endif -%}
+{% comment %}
+  Footer Section - Balance Intelligente
+  ------------------------------------------------------------------------------
+  Section pied de page avec liens, réseaux sociaux et newsletter
+{% endcomment %}
+
+<footer class="bg-white" aria-labelledby="footer-heading">
+  <h2 id="footer-heading" class="sr-only">Footer</h2>
+  
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="py-20">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        <!-- Logo & Description -->
+        <div class="md:col-span-4">
+          <div class="flex items-center">
+            {% if section.settings.footer_logo != blank %}
+              <img 
+                class="h-12 w-auto"
+                src="{{ section.settings.footer_logo | img_url: '120x' }}"
+                alt="{{ shop.name }}"
+              >
+            {% else %}
+              <span class="text-2xl font-bold text-gray-900">{{ shop.name }}</span>
+            {% endif %}
+          </div>
+          <p class="mt-6 text-base text-gray-500">
+            {{ section.settings.footer_text | default: "Votre partenaire pour une vie plus saine grâce à notre technologie de pointe en matière de suivi de la santé." }}
+          </p>
+          
+          <!-- Social Links -->
+          <div class="mt-6 flex space-x-6">
+            {% if settings.social_twitter_link != blank %}
+              <a href="{{ settings.social_twitter_link }}" class="text-gray-400 hover:text-gray-500">
+                <span class="sr-only">Twitter</span>
+                {% render 'icon-twitter' %}
+              </a>
+            {% endif %}
+
+            {% if settings.social_facebook_link != blank %}
+              <a href="{{ settings.social_facebook_link }}" class="text-gray-400 hover:text-gray-500">
+                <span class="sr-only">Facebook</span>
+                {% render 'icon-facebook' %}
+              </a>
+            {% endif %}
+
+            {% if settings.social_instagram_link != blank %}
+              <a href="{{ settings.social_instagram_link }}" class="text-gray-400 hover:text-gray-500">
+                <span class="sr-only">Instagram</span>
+                {% render 'icon-instagram' %}
+              </a>
+            {% endif %}
+
+            {% if settings.social_youtube_link != blank %}
+              <a href="{{ settings.social_youtube_link }}" class="text-gray-400 hover:text-gray-500">
+                <span class="sr-only">YouTube</span>
+                {% render 'icon-youtube' %}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="md:col-span-2">
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+            {{ section.settings.menu_1_title | default: "Produits" }}
+          </h3>
+          <ul role="list" class="mt-4 space-y-4">
+            {% for link in linklists[section.settings.footer_menu_1].links %}
+              <li>
+                <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">
+                  {{ link.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="md:col-span-2">
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+            {{ section.settings.menu_2_title | default: "Support" }}
+          </h3>
+          <ul role="list" class="mt-4 space-y-4">
+            {% for link in linklists[section.settings.footer_menu_2].links %}
+              <li>
+                <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">
+                  {{ link.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="md:col-span-2">
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+            {{ section.settings.menu_3_title | default: "Entreprise" }}
+          </h3>
+          <ul role="list" class="mt-4 space-y-4">
+            {% for link in linklists[section.settings.footer_menu_3].links %}
+              <li>
+                <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-900">
+                  {{ link.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <!-- Newsletter -->
+        <div class="md:col-span-2">
+          <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">
+            {{ section.settings.newsletter_title | default: "Newsletter" }}
+          </h3>
+          <p class="mt-4 text-base text-gray-500">
+            {{ section.settings.newsletter_text | default: "Les dernières nouvelles, articles et ressources, envoyés directement dans votre boîte mail." }}
+          </p>
+          <form class="mt-4">
+            <div class="flex">
+              <label for="email-address" class="sr-only">Adresse email</label>
+              <input 
+                id="email-address" 
+                type="email" 
+                required 
+                class="min-w-0 flex-auto rounded-l-md border-0 bg-white/5 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6" 
+                placeholder="Votre email"
+              >
+              <button 
+                type="submit" 
+                class="flex-none rounded-r-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                S'inscrire
+              </button>
             </div>
-        {%- endcase -%}
-      {%- endfor -%}
+          </form>
+        </div>
+      </div>
     </div>
-    
-    <div class="mt-8 border-t border-gray-200 pt-8">
-      <p class="text-base text-gray-400 text-center">
-        © {{ 'now' | date: "%Y" }} {{ shop.name }}. {{ 'general.footer.copyright' | t }}
-      </p>
+
+    <!-- Bottom Bar -->
+    <div class="border-t border-gray-100 py-10">
+      <div class="flex flex-col items-center justify-between gap-6 sm:flex-row">
+        <!-- Copyright -->
+        <p class="text-sm text-gray-500">
+          &copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. Tous droits réservés.
+        </p>
+
+        <!-- Legal Links -->
+        <div class="flex space-x-6">
+          {% for link in linklists[section.settings.footer_bottom_menu].links %}
+            <a href="{{ link.url }}" class="text-sm text-gray-500 hover:text-gray-900">
+              {{ link.title }}
+            </a>
+          {% endfor %}
+        </div>
+
+        <!-- Payment Methods -->
+        {% if section.settings.show_payment_icons %}
+          <div class="flex space-x-4">
+            {% for type in shop.enabled_payment_types %}
+              {{ type | payment_type_svg_tag: class: 'h-6' }}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 </footer>
@@ -34,24 +168,73 @@
 {% schema %}
 {
   "name": "Footer",
-  "max_blocks": 4,
-  "blocks": [
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "footer_logo",
+      "label": "Footer Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "footer_text",
+      "label": "Footer Text",
+      "default": "Votre partenaire pour une vie plus saine grâce à notre technologie de pointe en matière de suivi de la santé."
+    },
+    {
+      "type": "text",
+      "id": "menu_1_title",
+      "label": "Menu 1 Title",
+      "default": "Produits"
+    },
     {
       "type": "link_list",
-      "name": "Menu",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Heading",
-          "default": "Quick links"
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "label": "Menu"
-        }
-      ]
+      "id": "footer_menu_1",
+      "label": "Menu 1 Links"
+    },
+    {
+      "type": "text",
+      "id": "menu_2_title",
+      "label": "Menu 2 Title",
+      "default": "Support"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_2",
+      "label": "Menu 2 Links"
+    },
+    {
+      "type": "text",
+      "id": "menu_3_title",
+      "label": "Menu 3 Title",
+      "default": "Entreprise"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_3",
+      "label": "Menu 3 Links"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Les dernières nouvelles, articles et ressources, envoyés directement dans votre boîte mail."
+    },
+    {
+      "type": "link_list",
+      "id": "footer_bottom_menu",
+      "label": "Bottom Menu Links"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
     }
   ]
 }

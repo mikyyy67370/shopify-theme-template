@@ -4,43 +4,110 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
   
-  <link rel="canonical" href="{{ canonical_url }}">
-  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
-
   {%- if settings.favicon != blank -%}
-    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
   {%- endif -%}
 
-  <title>
-    {{ page_title }}
-    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
-    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
-    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
-  </title>
-
+  <title>{{ page_title }}</title>
+  
   {% if page_description %}
     <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
+  <!-- Design System -->
+  {{ 'design-system.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Theme CSS -->
   {{ 'theme.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Animations CSS -->
+  {{ 'animations.css' | asset_url | stylesheet_tag }}
+  
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+  
+  <!-- AOS CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
   
   {{ content_for_header }}
+
+  <style>
+    /* Optimisation des polices */
+    @font-face {
+      font-family: 'Montserrat';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/montserrat/v25/JTUHjIg1_i6t8kCHKm4532VJOt5-QNFgpCtr6Hw5aXp-p7K4KLg.woff2) format('woff2');
+    }
+    
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url(https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_Ea.woff2) format('woff2');
+    }
+  </style>
 </head>
 
 <body>
+  <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+    {{ "accessibility.skip_to_text" | t }}
+  </a>
+
+  {% section 'announcement-bar' %}
   {% section 'header' %}
 
-  <main role="main" id="MainContent">
+  <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
   {% section 'footer' %}
 
-  {{ 'alpine.js' | asset_url | script_tag }}
-  {{ 'global.js' | asset_url | script_tag }}
+  <!-- Scripts -->
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
+  
+  <!-- Swiper JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  
+  <!-- AOS JS -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+  <script>
+    window.shopUrl = '{{ request.origin }}';
+    window.routes = {
+      cart_add_url: '{{ routes.cart_add_url }}',
+      cart_change_url: '{{ routes.cart_change_url }}',
+      cart_update_url: '{{ routes.cart_update_url }}',
+      cart_url: '{{ routes.cart_url }}',
+      predictive_search_url: '{{ routes.predictive_search_url }}'
+    };
+
+    // Initialisation du design system
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialiser AOS
+      AOS.init({
+        duration: 800,
+        once: true,
+        offset: 50
+      });
+      
+      // Initialiser les tooltips
+      const tooltips = document.querySelectorAll('[data-tooltip]');
+      tooltips.forEach(tooltip => {
+        new Tooltip(tooltip, {
+          placement: 'top',
+          trigger: 'hover'
+        });
+      });
+    });
+  </script>
 </body>
 </html>

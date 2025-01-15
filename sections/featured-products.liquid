@@ -1,58 +1,145 @@
 {% comment %}
-  Featured Products Section
+  Featured Products Section - Balance Intelligente
   ------------------------------------------------------------------------------
-  Display a grid of products from a selected collection
+  Section présentant les produits phares avec leurs caractéristiques principales
 {% endcomment %}
 
-<div class="bg-white">
-  <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-    <h2 class="text-2xl font-extrabold text-gray-900 mb-6">
-      {{ section.settings.title | escape }}
-    </h2>
-
-    <div class="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-      {%- assign collection = collections[section.settings.collection] -%}
-      {%- for product in collection.products limit: section.settings.products_to_show -%}
-        <div class="group">
-          <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
-            <img src="{{ product.featured_image | img_url: '500x500', crop: 'center' }}"
-                 alt="{{ product.featured_image.alt | escape }}"
-                 class="w-full h-full object-center object-cover group-hover:opacity-75">
-          </div>
-          <h3 class="mt-4 text-sm text-gray-700">
-            <a href="{{ product.url }}">
-              {{ product.title }}
-            </a>
-          </h3>
-          <p class="mt-1 text-lg font-medium text-gray-900">
-            {{ product.price | money }}
-          </p>
-        </div>
-      {%- endfor -%}
+<div class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="mx-auto max-w-2xl text-center mb-16">
+      <h2 
+        class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+        data-aos="fade-up"
+      >
+        {{ section.settings.title | default: "Nos produits phares" }}
+      </h2>
+      <p 
+        class="mt-4 text-lg text-gray-500"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        {{ section.settings.subtitle | default: "Découvrez notre gamme de balances intelligentes conçues pour votre bien-être." }}
+      </p>
     </div>
 
-    {%- if section.settings.show_view_all and section.settings.collection != blank -%}
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+      {% for product in collections[section.settings.collection].products limit: section.settings.products_count %}
+        <div 
+          class="group relative"
+          data-aos="fade-up"
+          data-aos-delay="{{ forloop.index | times: 200 }}"
+        >
+          <!-- Product Image -->
+          <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-2xl bg-gray-100">
+            <img 
+              src="{{ product.featured_image | img_url: '500x500', crop: 'center' }}" 
+              alt="{{ product.title }}"
+              class="h-full w-full object-cover object-center group-hover:opacity-75 transition-opacity duration-300"
+            >
+            
+            <!-- Quick View Button -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <button 
+                type="button"
+                class="btn btn-primary-outline"
+                onclick="quickView('{{ product.handle }}')"
+              >
+                Aperçu rapide
+              </button>
+            </div>
+          </div>
+
+          <!-- Product Info -->
+          <div class="mt-4">
+            <h3 class="text-lg font-semibold text-gray-900">
+              <a href="{{ product.url }}">{{ product.title }}</a>
+            </h3>
+            
+            <!-- Price -->
+            <div class="mt-2 flex items-center justify-between">
+              <p class="text-xl font-medium text-gray-900">
+                {% if product.compare_at_price > product.price %}
+                  <span class="text-sm line-through text-gray-500">{{ product.compare_at_price | money }}</span>
+                {% endif %}
+                {{ product.price | money }}
+              </p>
+
+              {% if product.available %}
+                <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                  En stock
+                </span>
+              {% else %}
+                <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+                  Rupture
+                </span>
+              {% endif %}
+            </div>
+
+            <!-- Features -->
+            <div class="mt-4 space-y-2">
+              {% for tag in product.tags limit: 3 %}
+                <div class="flex items-center text-sm text-gray-500">
+                  <svg class="h-5 w-5 text-accent mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                  </svg>
+                  {{ tag }}
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Add to Cart -->
+            <div class="mt-6">
+              <form method="post" action="/cart/add">
+                <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}"/>
+                <button 
+                  type="submit"
+                  class="btn btn-primary w-full"
+                  {% unless product.available %}disabled{% endunless %}
+                >
+                  {% if product.available %}
+                    Ajouter au panier
+                  {% else %}
+                    Indisponible
+                  {% endif %}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- View All Button -->
+    {% if section.settings.show_view_all %}
       <div class="text-center mt-12">
-        <a href="{{ collections[section.settings.collection].url }}"
-           class="inline-block bg-indigo-600 py-3 px-8 rounded-md text-base font-medium text-white hover:bg-indigo-700">
-          {{ 'collections.general.view_all' | t }}
+        <a 
+          href="{{ collections[section.settings.collection].url }}"
+          class="btn btn-secondary"
+        >
+          {{ section.settings.view_all_text | default: "Voir tous les produits" }}
         </a>
       </div>
-    {%- endif -%}
+    {% endif %}
   </div>
 </div>
 
 {% schema %}
 {
-  "name": "Featured products",
-  "tag": "section",
-  "class": "featured-products-section",
+  "name": "Featured Products",
   "settings": [
     {
       "type": "text",
       "id": "title",
-      "label": "Heading",
-      "default": "Featured Products"
+      "label": "Title",
+      "default": "Nos produits phares"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Découvrez notre gamme de balances intelligentes conçues pour votre bien-être."
     },
     {
       "type": "collection",
@@ -61,28 +148,38 @@
     },
     {
       "type": "range",
-      "id": "products_to_show",
-      "min": 4,
+      "id": "products_count",
+      "min": 3,
       "max": 12,
-      "step": 4,
-      "default": 4,
-      "label": "Products to show"
+      "step": 3,
+      "label": "Number of products to show",
+      "default": 3
     },
     {
       "type": "checkbox",
       "id": "show_view_all",
-      "default": true,
-      "label": "Show 'View all' button"
+      "label": "Show View All button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All button text",
+      "default": "Voir tous les produits"
     }
   ],
   "presets": [
     {
-      "name": "Featured products",
-      "settings": {
-        "products_to_show": 4,
-        "show_view_all": true
-      }
+      "name": "Featured Products",
+      "category": "Products"
     }
   ]
 }
 {% endschema %}
+
+{% javascript %}
+function quickView(handle) {
+  // Implement quick view functionality
+  console.log('Quick view for product:', handle);
+}
+{% endjavascript %}

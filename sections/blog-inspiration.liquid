@@ -1,0 +1,204 @@
+{% comment %}
+  Blog/Inspiration Section - Balance Intelligente
+  ------------------------------------------------------------------------------
+  Section présentant les derniers articles du blog et conseils santé
+{% endcomment %}
+
+<div class="bg-gray-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="mx-auto max-w-2xl text-center mb-16">
+      <h2 
+        class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+        data-aos="fade-up"
+      >
+        {{ section.settings.title | default: "Conseils et inspiration" }}
+      </h2>
+      <p 
+        class="mt-4 text-lg text-gray-500"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        {{ section.settings.subtitle | default: "Découvrez nos derniers articles et conseils pour une vie plus saine." }}
+      </p>
+    </div>
+
+    <!-- Blog Posts Grid -->
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {% for article in blogs[section.settings.blog].articles limit: section.settings.posts_count %}
+        <article 
+          class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-32 sm:pt-48 lg:pt-64"
+          data-aos="fade-up"
+          data-aos-delay="{{ forloop.index | times: 200 }}"
+        >
+          <!-- Background Image -->
+          <img 
+            src="{{ article.image | img_url: '600x600', crop: 'center' }}" 
+            alt="{{ article.title }}"
+            class="absolute inset-0 -z-10 h-full w-full object-cover"
+          >
+          
+          <!-- Gradient Overlay -->
+          <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
+          
+          <!-- Category Badge -->
+          {% if article.tags.size > 0 %}
+            <div class="absolute top-4 left-4">
+              <span class="inline-flex items-center rounded-full bg-accent/10 backdrop-blur-sm px-3 py-1 text-sm font-medium text-accent">
+                {{ article.tags.first }}
+              </span>
+            </div>
+          {% endif %}
+
+          <!-- Content -->
+          <div class="flex flex-wrap items-center gap-y-1 overflow-hidden text-sm leading-6 text-gray-300">
+            <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+              {{ article.published_at | date: '%d %B %Y' }}
+            </time>
+            <div class="mr-8">
+              <span class="ml-2">•</span>
+              <span class="ml-2">{{ article.content | strip_html | size | divided_by: 5 | round }} min de lecture</span>
+            </div>
+          </div>
+          
+          <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
+            <a href="{{ article.url }}">
+              <span class="absolute inset-0"></span>
+              {{ article.title }}
+            </a>
+          </h3>
+          
+          <!-- Excerpt -->
+          <p class="mt-2 text-sm text-gray-300 line-clamp-2">
+            {{ article.excerpt_or_content | strip_html | truncatewords: 30 }}
+          </p>
+        </article>
+      {% endfor %}
+    </div>
+
+    <!-- View All Button -->
+    {% if section.settings.show_view_all %}
+      <div class="text-center mt-12">
+        <a 
+          href="/blogs/{{ section.settings.blog }}"
+          class="btn btn-secondary"
+          data-aos="fade-up"
+        >
+          {{ section.settings.view_all_text | default: "Voir tous les articles" }}
+        </a>
+      </div>
+    {% endif %}
+
+    <!-- Newsletter Signup -->
+    {% if section.settings.show_newsletter %}
+      <div 
+        class="mt-16 rounded-2xl bg-gray-900 py-10 px-6 sm:py-16 sm:px-12 lg:flex lg:items-center lg:py-20 lg:px-20"
+        data-aos="fade-up"
+        data-aos-delay="400"
+      >
+        <div class="lg:w-0 lg:flex-1">
+          <h2 class="text-3xl font-bold tracking-tight text-white">
+            {{ section.settings.newsletter_title | default: "Inscrivez-vous à notre newsletter" }}
+          </h2>
+          <p class="mt-4 text-lg text-gray-300">
+            {{ section.settings.newsletter_text | default: "Recevez nos derniers articles et conseils directement dans votre boîte mail." }}
+          </p>
+        </div>
+        
+        <div class="mt-8 lg:mt-0 lg:ml-8">
+          <form class="sm:flex">
+            <label for="email-address" class="sr-only">Adresse email</label>
+            <input 
+              id="email-address" 
+              name="email-address" 
+              type="email" 
+              autocomplete="email" 
+              required 
+              class="w-full rounded-md border-0 bg-white/5 px-3 py-2 text-base text-white placeholder:text-gray-400 focus:ring-2 focus:ring-accent sm:w-64"
+              placeholder="Entrez votre email"
+            >
+            <button 
+              type="submit"
+              class="mt-3 btn btn-primary w-full sm:mt-0 sm:ml-4 sm:w-auto"
+            >
+              S'inscrire
+            </button>
+          </form>
+          <p class="mt-3 text-sm text-gray-300">
+            Nous respectons votre vie privée. Désabonnement possible à tout moment.
+          </p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog Inspiration",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Conseils et inspiration"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Découvrez nos derniers articles et conseils pour une vie plus saine."
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "posts_count",
+      "min": 3,
+      "max": 9,
+      "step": 3,
+      "label": "Number of posts to show",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show View All button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All button text",
+      "default": "Voir tous les articles"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show Newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter Title",
+      "default": "Inscrivez-vous à notre newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Text",
+      "default": "Recevez nos derniers articles et conseils directement dans votre boîte mail."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Inspiration",
+      "category": "Blog"
+    }
+  ]
+}
+{% endschema %}

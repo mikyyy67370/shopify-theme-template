@@ -1,0 +1,220 @@
+/* Design System pour Balance Intelligente
+============================================================================== */
+
+/* Importation des polices */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+/* Variables CSS
+============================================================================== */
+:root {
+  /* Palette de couleurs */
+  --color-primary: #2563eb;          /* Bleu royal - Pour les CTA et éléments principaux */
+  --color-primary-light: #60a5fa;    /* Bleu clair - Pour les hovers et accents */
+  --color-primary-dark: #1d4ed8;     /* Bleu foncé - Pour les états actifs */
+  
+  --color-secondary: #0f172a;        /* Bleu nuit - Pour les titres et textes importants */
+  --color-secondary-light: #334155;  /* Gris bleuté - Pour les sous-titres */
+  
+  --color-accent: #22c55e;           /* Vert - Pour les succès et validations */
+  --color-accent-light: #86efac;     /* Vert clair - Pour les backgrounds d'accent */
+  
+  --color-error: #ef4444;            /* Rouge - Pour les erreurs */
+  --color-warning: #f59e0b;          /* Orange - Pour les avertissements */
+  
+  --color-gray-50: #f8fafc;          /* Gris très clair - Pour les backgrounds */
+  --color-gray-100: #f1f5f9;         /* Gris clair - Pour les cards */
+  --color-gray-200: #e2e8f0;         /* Gris - Pour les bordures */
+  --color-gray-300: #cbd5e1;         /* Gris moyen - Pour les séparateurs */
+  --color-gray-400: #94a3b8;         /* Gris foncé - Pour le texte secondaire */
+  --color-gray-500: #64748b;         /* Gris plus foncé - Pour le texte tertiaire */
+  
+  /* Typographie */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  
+  /* Tailles de police */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  
+  /* Espacements */
+  --spacing-xs: 0.25rem;  /* 4px */
+  --spacing-sm: 0.5rem;   /* 8px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+  --spacing-2xl: 3rem;    /* 48px */
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Reset et styles de base
+============================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--color-secondary);
+  background-color: var(--color-gray-50);
+}
+
+/* Typographie
+============================================================================== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-secondary);
+}
+
+h1 { font-size: var(--text-4xl); }
+h2 { font-size: var(--text-3xl); }
+h3 { font-size: var(--text-2xl); }
+h4 { font-size: var(--text-xl); }
+h5 { font-size: var(--text-lg); }
+h6 { font-size: var(--text-base); }
+
+/* Composants
+============================================================================== */
+
+/* Boutons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Cards */
+.card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-lg);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.badge-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.badge-success {
+  background-color: var(--color-accent-light);
+  color: var(--color-accent);
+}
+
+/* Icons */
+.icon {
+  width: 1.5em;
+  height: 1.5em;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-sm {
+  width: 1em;
+  height: 1em;
+}
+
+.icon-lg {
+  width: 2em;
+  height: 2em;
+}
+
+/* Utilities
+============================================================================== */
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.text-accent { color: var(--color-accent); }
+.text-gray { color: var(--color-gray-400); }
+
+.bg-primary { background-color: var(--color-primary); }
+.bg-secondary { background-color: var(--color-secondary); }
+.bg-accent { background-color: var(--color-accent); }
+.bg-gray { background-color: var(--color-gray-100); }
+
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-full { border-radius: var(--radius-full); }
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow-md { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* Responsive Design
+============================================================================== */
+@media (max-width: 640px) {
+  :root {
+    --text-4xl: 2rem;    /* 32px */
+    --text-3xl: 1.75rem; /* 28px */
+    --text-2xl: 1.5rem;  /* 24px */
+    --text-xl: 1.25rem;  /* 20px */
+  }
+  
+  .card {
+    padding: var(--spacing-md);
+  }
+}

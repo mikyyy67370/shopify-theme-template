@@ -1,0 +1,188 @@
+{% comment %}
+  Features Section - Balance Intelligente
+  ------------------------------------------------------------------------------
+  Section présentant les caractéristiques principales du produit
+{% endcomment %}
+
+<div class="bg-white py-24 sm:py-32" id="features">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="max-w-3xl mx-auto text-center mb-16">
+      <h2 
+        class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
+        data-aos="fade-up"
+      >
+        {{ section.settings.title | default: "Une technologie de pointe pour votre bien-être" }}
+      </h2>
+      <p 
+        class="mt-4 text-lg text-gray-500"
+        data-aos="fade-up"
+        data-aos-delay="200"
+      >
+        {{ section.settings.subtitle | default: "Découvrez les fonctionnalités avancées qui font de notre balance intelligente votre meilleur allié santé." }}
+      </p>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <!-- Feature 1: Mesures précises -->
+      <div 
+        class="relative p-8 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300"
+        data-aos="fade-up"
+        data-aos-delay="400"
+      >
+        <div class="absolute -top-4 -right-4 w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+          {% render 'icon', icon: 'weight', class: 'icon-sm text-white' %}
+        </div>
+        
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Mesures ultra-précises</h3>
+        <p class="text-gray-500">Technologie de capteurs avancée pour des mesures au dixième de gramme près. Suivez votre progression avec une précision inégalée.</p>
+        
+        <ul class="mt-6 space-y-3">
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Précision 0.1g
+          </li>
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Calibrage automatique
+          </li>
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Surface anti-dérapante
+          </li>
+        </ul>
+      </div>
+
+      <!-- Feature 2: App connectée -->
+      <div 
+        class="relative p-8 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300"
+        data-aos="fade-up"
+        data-aos-delay="600"
+      >
+        <div class="absolute -top-4 -right-4 w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+          {% render 'icon', icon: 'app', class: 'icon-sm text-white' %}
+        </div>
+        
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Application intuitive</h3>
+        <p class="text-gray-500">Suivez vos progrès en temps réel sur notre application mobile. Graphiques détaillés et conseils personnalisés.</p>
+        
+        <ul class="mt-6 space-y-3">
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Synchronisation automatique
+          </li>
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Historique complet
+          </li>
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Objectifs personnalisés
+          </li>
+        </ul>
+      </div>
+
+      <!-- Feature 3: Analyse complète -->
+      <div 
+        class="relative p-8 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300"
+        data-aos="fade-up"
+        data-aos-delay="800"
+      >
+        <div class="absolute -top-4 -right-4 w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+          {% render 'icon', icon: 'chart', class: 'icon-sm text-white' %}
+        </div>
+        
+        <h3 class="text-xl font-semibold text-gray-900 mb-4">Analyse complète</h3>
+        <p class="text-gray-500">Obtenez une vue détaillée de votre composition corporelle. IMC, masse musculaire, masse grasse et plus encore.</p>
+        
+        <ul class="mt-6 space-y-3">
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            17 mesures corporelles
+          </li>
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Tendances et prévisions
+          </li>
+          <li class="flex items-center text-sm text-gray-500">
+            <svg class="h-5 w-5 text-accent mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            Recommandations IA
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div 
+      class="mt-16 text-center"
+      data-aos="fade-up"
+      data-aos-delay="1000"
+    >
+      <a 
+        href="{{ section.settings.cta_link | default: '/products/smart-scale' }}"
+        class="btn btn-primary inline-flex items-center justify-center"
+      >
+        {{ section.settings.cta_text | default: "Découvrir toutes les fonctionnalités" }}
+        <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Features Main",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Une technologie de pointe pour votre bien-être"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Découvrez les fonctionnalités avancées qui font de notre balance intelligente votre meilleur allié santé."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Button Text",
+      "default": "Découvrir toutes les fonctionnalités"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Features Main",
+      "category": "Features"
+    }
+  ]
+}
+{% endschema %}

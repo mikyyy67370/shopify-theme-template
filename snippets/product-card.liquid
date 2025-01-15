@@ -10,107 +10,135 @@
 {% endcomment %}
 
 {%- if product != blank -%}
-  <div class="group relative">
-    <div class="aspect-w-4 aspect-h-5 sm:aspect-w-3 sm:aspect-h-4 rounded-lg overflow-hidden bg-gray-100">
-      {%- if product.featured_media -%}
-        <img src="{{ product.featured_media | img_url: '500x' }}"
-             alt="{{ product.featured_media.alt | escape }}"
-             class="w-full h-full object-center object-cover group-hover:opacity-75"
-             loading="lazy"
-             width="{{ product.featured_media.width }}"
-             height="{{ product.featured_media.height }}">
+  <div class="card-wrapper product-card-wrapper hover-lift" data-aos="fade-up">
+    <div class="card product-card">
+      <div class="card-image-wrapper relative overflow-hidden">
+        <!-- Image principale -->
+        <img
+          src="{{ product.featured_media | img_url: '533x' }}"
+          alt="{{ product.featured_media.alt | escape }}"
+          class="card-image transition-all duration-300 hover:scale-110"
+          loading="lazy"
+          width="533"
+          height="600"
+        >
         
-        {%- if show_secondary_image and product.media[1] -%}
-          <img src="{{ product.media[1] | img_url: '500x' }}"
-               alt="{{ product.media[1].alt | escape }}"
-               class="w-full h-full object-center object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-               loading="lazy"
-               width="{{ product.media[1].width }}"
-               height="{{ product.media[1].height }}">
-        {%- endif -%}
-      {%- else -%}
-        {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-center object-cover' }}
-      {%- endif -%}
+        <!-- Image au survol -->
+        {% if product.media[1] != blank %}
+          <img
+            src="{{ product.media[1] | img_url: '533x' }}"
+            alt="{{ product.media[1].alt | escape }}"
+            class="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300"
+            loading="lazy"
+            width="533"
+            height="600"
+          >
+        {% endif %}
 
-      {%- if show_quick_view -%}
-        <button type="button"
-                class="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-white bg-opacity-90 text-sm font-medium text-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                onclick="quickView('{{ product.handle }}')">
-          Quick view
-        </button>
-      {%- endif -%}
-    </div>
-
-    <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
-      <h3>
-        <a href="{{ product.url }}">
-          <span aria-hidden="true" class="absolute inset-0"></span>
-          {{ product.title }}
-        </a>
-      </h3>
-    </div>
-
-    {%- if show_vendor -%}
-      <p class="mt-1 text-sm text-gray-500">{{ product.vendor }}</p>
-    {%- endif -%}
-
-    <div class="mt-1 flex items-center justify-between">
-      <p class="text-sm font-medium text-gray-900">
-        {%- if product.price_varies -%}
-          <span class="text-gray-500">From </span>
-        {%- endif -%}
-        {{ product.price | money }}
-        
-        {%- if product.compare_at_price > product.price -%}
-          <span class="ml-2 text-sm text-gray-500 line-through">
-            {{ product.compare_at_price | money }}
+        <!-- Badge de promotion -->
+        {% if product.compare_at_price > product.price %}
+          <span class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+            {{ 'products.product.on_sale' | t }}
           </span>
-        {%- endif -%}
-      </p>
+        {% endif %}
 
-      {%- if product.available -%}
-        {%- if product.variants.size > 1 -%}
-          <span class="text-sm text-gray-500">{{ product.variants.size }} variants</span>
-        {%- endif -%}
-      {%- else -%}
-        <span class="text-sm text-red-600">Sold out</span>
-      {%- endif -%}
-    </div>
-
-    {%- if product.available and product.variants.size == 1 -%}
-      <div class="mt-4">
-        <form method="post" action="/cart/add" class="w-full">
-          <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
-          <button type="submit"
-                  class="w-full bg-primary border border-transparent rounded-md py-2 px-8 flex items-center justify-center text-sm font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
-            Add to cart
+        <!-- Quick view button -->
+        {% if show_quick_view %}
+          <button 
+            class="absolute bottom-4 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 bg-white text-gray-900 px-4 py-2 rounded-full shadow-lg hover:bg-gray-100"
+            data-interaction="loading"
+            onclick="quickView('{{ product.handle }}')"
+          >
+            {{ 'products.product.quick_view' | t }}
           </button>
-        </form>
+        {% endif %}
       </div>
-    {%- endif -%}
+
+      <div class="card-information p-4">
+        <div class="card-information__wrapper">
+          {% if show_vendor %}
+            <span class="text-sm text-gray-500 mb-1 block">{{ product.vendor }}</span>
+          {% endif %}
+
+          <h3 class="card-information__text h5 mb-2">
+            <a href="{{ product.url }}" class="full-unstyled-link hover:text-primary transition-colors duration-300">
+              {{ product.title | escape }}
+            </a>
+          </h3>
+
+          <div class="price {% if product.compare_at_price > product.price %} price--on-sale {% endif %}">
+            <div class="price__container">
+              <div class="price__regular">
+                <span class="text-lg font-medium">
+                  {{ product.price | money }}
+                </span>
+                {% if product.compare_at_price > product.price %}
+                  <span class="text-gray-500 line-through ml-2">
+                    {{ product.compare_at_price | money }}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Add to cart button -->
+          {% if product.available and product.variants.size == 1 %}
+            <button 
+              class="w-full mt-4 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transform hover:scale-105 transition-all duration-300"
+              data-interaction="success"
+              onclick="addToCart('{{ product.first_available_variant.id }}')"
+            >
+              {{ 'products.product.add_to_cart' | t }}
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
   </div>
 {%- endif -%}
 
-{% if show_quick_view %}
-  <script>
-    function quickView(handle) {
-      // Implement quick view functionality
-      fetch(`/products/${handle}?view=quick-view`)
-        .then(response => response.text())
-        .then(html => {
-          // Create modal and display product quick view
-          const modal = document.createElement('div');
-          modal.innerHTML = html;
-          document.body.appendChild(modal);
-          
-          // Add close functionality
-          const closeButton = modal.querySelector('.quick-view-close');
-          if (closeButton) {
-            closeButton.addEventListener('click', () => {
-              modal.remove();
-            });
-          }
+<style>
+.product-card {
+  @apply relative overflow-hidden rounded-lg bg-white shadow-sm transition-all duration-300;
+}
+
+.product-card:hover {
+  @apply shadow-lg;
+}
+
+.product-card .card-image-wrapper {
+  @apply aspect-w-1 aspect-h-1 w-full overflow-hidden;
+}
+
+@media (max-width: 640px) {
+  .product-card .quick-view-button {
+    @apply hidden;
+  }
+}
+</style>
+
+<script>
+function quickView(handle) {
+  // Implement quick view functionality
+  fetch(`/products/${handle}?view=quick-view`)
+    .then(response => response.text())
+    .then(html => {
+      // Create modal and display product quick view
+      const modal = document.createElement('div');
+      modal.innerHTML = html;
+      document.body.appendChild(modal);
+      
+      // Add close functionality
+      const closeButton = modal.querySelector('.quick-view-close');
+      if (closeButton) {
+        closeButton.addEventListener('click', () => {
+          modal.remove();
         });
-    }
-  </script>
-{% endif %}
+      }
+    });
+}
+
+function addToCart(variantId) {
+  // Implement add to cart functionality
+}
+</script>
