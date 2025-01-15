@@ -1,107 +1,164 @@
 {% comment %}
   Hero Section - Balance Intelligente
   ------------------------------------------------------------------------------
-  Section principale avec vidéo d'arrière-plan et proposition de valeur
+  Section principale moderne et interactive
 {% endcomment %}
 
-<div class="relative bg-gray-900 overflow-hidden">
-  <!-- Video Background -->
-  <div class="absolute inset-0">
-    <video 
-      class="w-full h-full object-cover"
-      autoplay 
-      loop 
-      muted 
-      playsinline
-      poster="{{ section.settings.background_image | img_url: '1920x' }}"
-    >
-      {% if section.settings.background_video != blank %}
-        <source src="{{ section.settings.background_video }}" type="video/mp4">
-      {% endif %}
-    </video>
-    <div class="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-900/70"></div>
+<div class="relative isolate bg-gradient-to-b from-white to-gray-50">
+  <!-- Background Gradient & Pattern -->
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <!-- Gradient Circles -->
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>
+    
+    <!-- Subtle Grid -->
+    <div class="absolute inset-0 bg-grid-primary/10 bg-[size:20px_20px]"></div>
   </div>
 
-  <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
-    <div class="max-w-3xl">
-      <!-- Badge -->
-      <div 
-        class="inline-flex items-center px-4 py-2 rounded-full bg-accent/10 backdrop-blur-sm mb-8"
-        data-aos="fade-down"
-        data-aos-delay="200"
-      >
-        <div class="h-2 w-2 rounded-full bg-accent animate-pulse"></div>
-        <span class="ml-3 text-sm font-medium text-accent">
-          {{ section.settings.badge_text | default: "Nouvelle Génération" }}
-        </span>
-      </div>
+  <div class="mx-auto max-w-7xl">
+    <div class="relative px-4 py-12 sm:px-6 lg:px-8 lg:py-24">
+      <div class="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:gap-x-12 lg:items-center">
+        <!-- Left Content -->
+        <div class="max-w-2xl" data-aos="fade-up">
+          <!-- Badge -->
+          <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-primary/20 to-accent/20 backdrop-blur-sm mb-8 animate-pulse-slow">
+            <div class="flex space-x-2 items-center">
+              <span class="h-2 w-2 rounded-full bg-primary"></span>
+              <span class="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                {{ section.settings.badge_text | default: "Innovation 2024" }}
+              </span>
+            </div>
+          </div>
 
-      <!-- Main Title -->
-      <h1 
-        class="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl mb-6"
-        data-aos="fade-right"
-        data-aos-delay="400"
-      >
-        {{ section.settings.title | default: "La balance intelligente qui révolutionne votre suivi santé" }}
-      </h1>
+          <!-- Main Title -->
+          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+            <span class="block text-gray-900">{{ section.settings.title_line1 | default: "Votre coach santé" }}</span>
+            <span class="block mt-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+              {{ section.settings.title_line2 | default: "intelligent" }}
+            </span>
+          </h1>
 
-      <!-- Subtitle -->
-      <p 
-        class="text-xl text-gray-300 max-w-2xl mb-8"
-        data-aos="fade-right"
-        data-aos-delay="600"
-      >
-        {{ section.settings.subtitle | default: "Suivez votre composition corporelle avec une précision inégalée. Synchronisation automatique avec votre smartphone et conseils personnalisés." }}
-      </p>
+          <!-- Subtitle -->
+          <p class="text-xl text-gray-600 max-w-2xl mb-8 leading-relaxed">
+            {{ section.settings.subtitle | default: "Découvrez la balance connectée qui révolutionne votre suivi santé. Analyses précises, conseils personnalisés et synchronisation instantanée avec votre smartphone." }}
+          </p>
 
-      <!-- CTA Buttons -->
-      <div 
-        class="flex flex-col sm:flex-row gap-4"
-        data-aos="fade-up"
-        data-aos-delay="800"
-      >
-        <a 
-          href="{{ section.settings.primary_button_link | default: '/products/smart-scale' }}"
-          class="btn btn-primary inline-flex items-center justify-center"
-        >
-          {{ section.settings.primary_button_text | default: "Découvrir le produit" }}
-          <svg class="ml-2 -mr-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-          </svg>
-        </a>
-        <a 
-          href="{{ section.settings.secondary_button_link | default: '#features' }}"
-          class="btn btn-secondary inline-flex items-center justify-center"
-        >
-          {{ section.settings.secondary_button_text | default: "En savoir plus" }}
-        </a>
-      </div>
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-3 gap-6 mb-12 p-4 bg-white/50 backdrop-blur-sm rounded-2xl border border-gray-100">
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">17+</div>
+              <div class="text-sm text-gray-600">Métriques</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">0.1g</div>
+              <div class="text-sm text-gray-600">Précision</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold text-primary">24/7</div>
+              <div class="text-sm text-gray-600">Suivi</div>
+            </div>
+          </div>
 
-      <!-- Key Features -->
-      <div 
-        class="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-8"
-        data-aos="fade-up"
-        data-aos-delay="1000"
-      >
-        <!-- Feature 1 -->
-        <div class="flex items-center space-x-3">
-          {% render 'icon', icon: 'weight', class: 'icon-sm text-accent' %}
-          <span class="text-sm font-medium text-white">Précision 0.1g</span>
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 mb-12">
+            <a 
+              href="{{ section.settings.primary_button_link | default: '/products/smart-scale' }}"
+              class="group relative inline-flex items-center justify-center px-8 py-3 font-medium text-white bg-gradient-to-r from-primary to-accent rounded-xl shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transform hover:-translate-y-0.5 transition-all duration-300"
+            >
+              <span class="relative">
+                {{ section.settings.primary_button_text | default: "Commander maintenant" }}
+                <span class="ml-2 text-sm">→</span>
+              </span>
+            </a>
+            <a 
+              href="{{ section.settings.secondary_button_link | default: '#features' }}"
+              class="group inline-flex items-center justify-center px-8 py-3 font-medium text-gray-700 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-primary/20 transform hover:-translate-y-0.5 transition-all duration-300"
+            >
+              {{ section.settings.secondary_button_text | default: "En savoir plus" }}
+              <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+              </svg>
+            </a>
+          </div>
+
+          <!-- Trust Badges -->
+          <div class="flex items-center gap-6 text-gray-400">
+            <div class="flex items-center gap-1">
+              <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+              </svg>
+              <span class="text-sm">4.9/5</span>
+            </div>
+            <span>•</span>
+            <div class="text-sm">Livraison gratuite</div>
+            <span>•</span>
+            <div class="text-sm">Garantie 2 ans</div>
+          </div>
         </div>
-        
-        <!-- Feature 2 -->
-        <div class="flex items-center space-x-3">
-          {% render 'icon', icon: 'sync', class: 'icon-sm text-accent' %}
-          <span class="text-sm font-medium text-white">Sync automatique</span>
-        </div>
-        
-        <!-- Feature 3 -->
-        <div class="flex items-center space-x-3">
-          {% render 'icon', icon: 'battery', class: 'icon-sm text-accent' %}
-          <span class="text-sm font-medium text-white">Batterie 6 mois</span>
+
+        <!-- Right Content -->
+        <div class="relative lg:ml-auto" data-aos="fade-left" data-aos-delay="200">
+          <!-- Main Product Image -->
+          <div class="relative">
+            <div class="aspect-w-4 aspect-h-3 rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 to-white shadow-2xl">
+              <img 
+                src="{{ section.settings.hero_image | default: 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-collection-6_large.png' | img_url: '1000x1000', crop: 'center' }}"
+                alt="Balance connectée en utilisation"
+                class="object-cover w-full h-full transform hover:scale-105 transition-transform duration-700"
+              >
+            </div>
+
+            <!-- Floating Elements -->
+            <!-- App Interface -->
+            <div class="absolute -top-6 -right-6 w-48 rounded-xl shadow-xl bg-white p-2 animate-float-slow hidden sm:block">
+              <div class="relative rounded-lg overflow-hidden">
+                <img 
+                  src="{{ section.settings.app_screenshot | img_url: '200x400', crop: 'center' }}"
+                  alt="Interface application mobile"
+                  class="w-full h-auto"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl p-4 animate-float hidden sm:block">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 h-12 w-12 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                  {% render 'icon', icon: 'chart', class: 'icon-md text-primary' %}
+                </div>
+                <div>
+                  <div class="flex items-baseline">
+                    <span class="text-2xl font-bold text-primary">+15%</span>
+                    <svg class="w-4 h-4 ml-1 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                  </div>
+                  <p class="text-sm text-gray-600">Progression</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Features Pills -->
+            <div class="absolute top-4 left-4 flex flex-col gap-2">
+              {% for feature in section.settings.features limit: 3 %}
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-white/90 backdrop-blur-sm shadow-sm text-sm text-gray-700">
+                  <span class="w-2 h-2 rounded-full bg-primary mr-2"></span>
+                  {{ feature }}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Bottom Wave -->
+  <div class="absolute bottom-0 left-0 right-0">
+    <svg class="w-full h-auto" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V120Z" fill="currentColor" class="text-gray-50"/>
+    </svg>
   </div>
 </div>
 
@@ -113,25 +170,31 @@
       "type": "text",
       "id": "badge_text",
       "label": "Badge Text",
-      "default": "Nouvelle Génération"
+      "default": "Innovation 2024"
     },
     {
       "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "La balance intelligente qui révolutionne votre suivi santé"
+      "id": "title_line1",
+      "label": "Title Line 1",
+      "default": "Votre coach santé"
+    },
+    {
+      "type": "text",
+      "id": "title_line2",
+      "label": "Title Line 2",
+      "default": "intelligent"
     },
     {
       "type": "textarea",
       "id": "subtitle",
       "label": "Subtitle",
-      "default": "Suivez votre composition corporelle avec une précision inégalée. Synchronisation automatique avec votre smartphone et conseils personnalisés."
+      "default": "Découvrez la balance connectée qui révolutionne votre suivi santé. Analyses précises, conseils personnalisés et synchronisation instantanée avec votre smartphone."
     },
     {
       "type": "text",
       "id": "primary_button_text",
       "label": "Primary Button Text",
-      "default": "Découvrir le produit"
+      "default": "Commander maintenant"
     },
     {
       "type": "url",
@@ -151,13 +214,19 @@
     },
     {
       "type": "image_picker",
-      "id": "background_image",
-      "label": "Background Image"
+      "id": "hero_image",
+      "label": "Hero Image"
     },
     {
-      "type": "url",
-      "id": "background_video",
-      "label": "Background Video URL (MP4)"
+      "type": "image_picker",
+      "id": "app_screenshot",
+      "label": "App Screenshot"
+    },
+    {
+      "type": "textarea",
+      "id": "features",
+      "label": "Features (one per line)",
+      "default": "WiFi & Bluetooth\nSuivi avancé\n17 métriques"
     }
   ],
   "presets": [
@@ -168,3 +237,57 @@
   ]
 }
 {% endschema %}
+
+{% stylesheet %}
+.bg-grid-primary {
+  background-image: linear-gradient(var(--primary-color/10) 1px, transparent 1px),
+    linear-gradient(to right, var(--primary-color/10) 1px, transparent 1px);
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .7;
+  }
+}
+{% endstylesheet %}
+
+{% javascript %}
+// Animations fluides au défilement
+document.addEventListener('DOMContentLoaded', () => {
+  const heroImage = document.querySelector('.hero-image');
+  if (heroImage) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('scale-up');
+        }
+      });
+    }, { threshold: 0.5 });
+    observer.observe(heroImage);
+  }
+});
+{% endjavascript %}
