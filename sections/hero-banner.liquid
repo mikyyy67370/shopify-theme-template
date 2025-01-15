@@ -5,30 +5,26 @@
 {% endcomment %}
 
 <div class="relative bg-gray-900">
-  {%- if section.settings.image != blank -%}
-    <div class="absolute inset-0">
-      <img src="{{ section.settings.image | image_url: width: 1920 }}" 
-           alt="{{ section.settings.title | escape }}"
-           class="w-full h-full object-cover">
-      <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
-    </div>
-  {%- endif -%}
+  <div class="absolute inset-0">
+    <img src="https://images.unsplash.com/photo-1576678927484-cc907957088c?auto=format&fit=crop&w=2000"
+         alt="Smart Scale Banner"
+         class="w-full h-full object-cover">
+    <div class="absolute inset-0 bg-gray-900 opacity-50"></div>
+  </div>
 
   <div class="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
     <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-      {{ section.settings.title }}
+      Découvrez notre Balance Connectée
     </h1>
     <p class="mt-6 text-xl text-gray-300 max-w-3xl">
-      {{ section.settings.text }}
+      Suivez votre santé avec précision grâce à notre balance intelligente. Synchronisation avec votre smartphone, mesures précises et design élégant.
     </p>
-    {%- if section.settings.button_label != blank -%}
-      <div class="mt-10">
-        <a href="{{ section.settings.button_link }}"
-           class="inline-block bg-white py-3 px-8 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100">
-          {{ section.settings.button_label }}
-        </a>
-      </div>
-    {%- endif -%}
+    <div class="mt-10">
+      <a href="/collections/all"
+         class="inline-block bg-white py-3 px-8 rounded-md text-base font-medium text-gray-900 hover:bg-gray-100">
+        Acheter Maintenant
+      </a>
+    </div>
   </div>
 </div>
 
@@ -47,19 +43,19 @@
       "type": "text",
       "id": "title",
       "label": "Heading",
-      "default": "Welcome to our store"
+      "default": "Découvrez notre Balance Connectée"
     },
     {
       "type": "richtext",
       "id": "text",
       "label": "Text",
-      "default": "<p>Share information about your brand with your customers.</p>"
+      "default": "<p>Suivez votre santé avec précision grâce à notre balance intelligente.</p>"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Button label",
-      "default": "Shop Now"
+      "default": "Acheter Maintenant"
     },
     {
       "type": "url",
@@ -71,9 +67,9 @@
     {
       "name": "Hero banner",
       "settings": {
-        "title": "Welcome to our store",
-        "text": "<p>Share information about your brand with your customers.</p>",
-        "button_label": "Shop Now"
+        "title": "Découvrez notre Balance Connectée",
+        "text": "<p>Suivez votre santé avec précision grâce à notre balance intelligente.</p>",
+        "button_label": "Acheter Maintenant"
       }
     }
   ]
