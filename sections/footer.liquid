@@ -1,0 +1,58 @@
+<footer class="bg-gray-50">
+  <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'link_list' -%}
+            <div class="space-y-4">
+              <h3 class="text-sm font-semibold text-gray-900 uppercase">{{ block.settings.title }}</h3>
+              {%- assign menu = block.settings.menu -%}
+              {%- if linklists[menu].links.size > 0 -%}
+                <ul class="space-y-2">
+                  {%- for link in linklists[menu].links -%}
+                    <li>
+                      <a href="{{ link.url }}" class="text-base text-gray-600 hover:text-gray-900">
+                        {{ link.title }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+    
+    <div class="mt-8 border-t border-gray-200 pt-8">
+      <p class="text-base text-gray-400 text-center">
+        © {{ 'now' | date: "%Y" }} {{ shop.name }}. {{ 'general.footer.copyright' | t }}
+      </p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
