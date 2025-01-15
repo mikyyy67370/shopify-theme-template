@@ -1,0 +1,100 @@
+<div class="popular-categories py-16" data-aos="fade-up">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12">{{ section.settings.title }}</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for block in section.blocks %}
+        {% if block.type == 'category' %}
+          <a href="{{ block.settings.collection.url }}" 
+             class="category-card group relative overflow-hidden rounded-lg aspect-w-16 aspect-h-9"
+             data-aos="fade-up" 
+             data-aos-delay="{{ forloop.index | times: 100 }}">
+            {% if block.settings.collection.image %}
+              <img src="{{ block.settings.collection.image | img_url: '800x' }}"
+                   alt="{{ block.settings.collection.title }}"
+                   class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700">
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'absolute inset-0 w-full h-full object-cover' }}
+            {% endif %}
+            
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent">
+              <div class="absolute bottom-0 left-0 p-6">
+                <h3 class="text-2xl font-bold text-white mb-2">{{ block.settings.collection.title }}</h3>
+                {% if block.settings.show_product_count %}
+                  <p class="text-white/80">{{ block.settings.collection.products_count }} Products</p>
+                {% endif %}
+              </div>
+            </div>
+            
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <span class="px-6 py-3 bg-white text-primary font-medium rounded-full transform -translate-y-2 group-hover:translate-y-0 transition-transform">
+                Shop Now
+              </span>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Popular Categories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Shop by Category"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_product_count",
+          "label": "Show product count",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Popular Categories",
+      "blocks": [
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "category"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.category-card::before {
+  content: '';
+  display: block;
+  padding-bottom: 66.666667%;
+}
+
+.category-card:hover img {
+  transform: scale(1.05);
+}
+</style>

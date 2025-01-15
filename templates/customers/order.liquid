@@ -1,0 +1,210 @@
+{% layout 'theme' %}
+
+<div class="bg-gray-50 min-h-screen">
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-3xl mx-auto">
+      <!-- En-tête -->
+      <div class="md:flex md:items-center md:justify-between mb-8">
+        <div class="flex-1 min-w-0">
+          <h1 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl">
+            Order {{ order.name }}
+          </h1>
+          <p class="mt-1 text-sm text-gray-500">
+            Placed on {{ order.created_at | date: "%B %d, %Y" }}
+          </p>
+        </div>
+        <div class="mt-4 flex md:mt-0 md:ml-4">
+          <a href="{{ routes.account_url }}"
+             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+            Back to account
+          </a>
+        </div>
+      </div>
+
+      <!-- Statut de la commande -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+        <div class="px-4 py-5 sm:p-6">
+          <div class="sm:flex sm:items-center sm:justify-between">
+            <div>
+              <h3 class="text-lg leading-6 font-medium text-gray-900">
+                Order Status
+              </h3>
+              <div class="mt-2 max-w-xl text-sm text-gray-500">
+                <p>
+                  Financial status:
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                             {% if order.financial_status == 'paid' %}
+                               bg-green-100 text-green-800
+                             {% elsif order.financial_status == 'pending' %}
+                               bg-yellow-100 text-yellow-800
+                             {% else %}
+                               bg-red-100 text-red-800
+                             {% endif %}">
+                    {{ order.financial_status_label }}
+                  </span>
+                </p>
+                <p class="mt-1">
+                  Fulfillment status:
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                             {% if order.fulfillment_status == 'fulfilled' %}
+                               bg-green-100 text-green-800
+                             {% elsif order.fulfillment_status == 'partial' %}
+                               bg-yellow-100 text-yellow-800
+                             {% else %}
+                               bg-gray-100 text-gray-800
+                             {% endif %}">
+                    {{ order.fulfillment_status_label }}
+                  </span>
+                </p>
+              </div>
+            </div>
+            {% if order.cancelled %}
+              <div class="mt-4 sm:mt-0">
+                <div class="inline-flex items-center px-4 py-2 border border-red-300 rounded-md text-sm font-medium text-red-700 bg-red-50">
+                  Cancelled on {{ order.cancelled_at | date: "%B %d, %Y" }}
+                  {% if order.cancel_reason %}
+                    <br>Reason: {{ order.cancel_reason }}
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Détails de la commande -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            Order Details
+          </h3>
+
+          <div class="border-t border-gray-200 divide-y divide-gray-200">
+            {% for line_item in order.line_items %}
+              <div class="py-4 sm:py-5">
+                <div class="flex items-center">
+                  <div class="flex-shrink-0 h-20 w-20 sm:h-24 sm:w-24">
+                    {% if line_item.image %}
+                      <img class="h-full w-full object-center object-cover rounded-lg"
+                           src="{{ line_item.image | img_url: '120x' }}"
+                           alt="{{ line_item.title | escape }}">
+                    {% endif %}
+                  </div>
+                  <div class="ml-6 flex-1">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h4 class="text-sm font-medium text-gray-900">
+                          <a href="{{ line_item.product.url }}" class="hover:text-primary">
+                            {{ line_item.title }}
+                          </a>
+                        </h4>
+                        {% if line_item.variant_title != 'Default Title' %}
+                          <p class="mt-1 text-sm text-gray-500">{{ line_item.variant_title }}</p>
+                        {% endif %}
+                        <p class="mt-1 text-sm text-gray-500">Quantity: {{ line_item.quantity }}</p>
+                      </div>
+                      <p class="text-sm font-medium text-gray-900">
+                        {{ line_item.final_line_price | money }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+
+          <!-- Résumé des coûts -->
+          <div class="border-t border-gray-200 pt-6">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-600">Subtotal</div>
+                <div class="text-sm font-medium text-gray-900">{{ order.subtotal_price | money }}</div>
+              </div>
+
+              {% for discount_application in order.discount_applications %}
+                <div class="flex items-center justify-between">
+                  <div class="text-sm text-gray-600">
+                    Discount ({{ discount_application.title }})
+                  </div>
+                  <div class="text-sm font-medium text-green-600">
+                    -{{ discount_application.total_allocated_amount | money }}
+                  </div>
+                </div>
+              {% endfor %}
+
+              {% for shipping_method in order.shipping_methods %}
+                <div class="flex items-center justify-between">
+                  <div class="text-sm text-gray-600">
+                    Shipping ({{ shipping_method.title }})
+                  </div>
+                  <div class="text-sm font-medium text-gray-900">
+                    {{ shipping_method.price | money }}
+                  </div>
+                </div>
+              {% endfor %}
+
+              {% if order.total_tax > 0 %}
+                <div class="flex items-center justify-between">
+                  <div class="text-sm text-gray-600">Tax</div>
+                  <div class="text-sm font-medium text-gray-900">{{ order.total_tax | money }}</div>
+                </div>
+              {% endif %}
+
+              <div class="flex items-center justify-between border-t border-gray-200 pt-4">
+                <div class="text-base font-medium text-gray-900">Total</div>
+                <div class="text-base font-medium text-gray-900">{{ order.total_price | money }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations de livraison et de facturation -->
+      <div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+        <div class="px-4 py-5 sm:p-6">
+          <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+            Shipping & Billing
+          </h3>
+
+          <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            {% if order.shipping_address %}
+              <div>
+                <h4 class="text-sm font-medium text-gray-900 mb-2">Shipping Address</h4>
+                <address class="not-italic text-sm text-gray-500">
+                  {{ order.shipping_address | format_address }}
+                </address>
+              </div>
+            {% endif %}
+
+            {% if order.billing_address %}
+              <div>
+                <h4 class="text-sm font-medium text-gray-900 mb-2">Billing Address</h4>
+                <address class="not-italic text-sm text-gray-500">
+                  {{ order.billing_address | format_address }}
+                </address>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations de paiement -->
+      {% if order.payment_gateway_names.size > 0 %}
+        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+          <div class="px-4 py-5 sm:p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+              Payment Information
+            </h3>
+
+            <div class="text-sm text-gray-500">
+              <p>Payment method: {{ order.payment_gateway_names | join: ', ' }}</p>
+              {% if order.financial_status == 'paid' %}
+                <p class="mt-1">Processed on {{ order.processed_at | date: "%B %d, %Y" }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

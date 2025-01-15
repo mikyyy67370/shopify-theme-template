@@ -1,0 +1,53 @@
+{% section 'collection-banner' %}
+
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Filtres -->
+    <div class="w-full lg:w-1/4">
+      {% section 'collection-filters' %}
+    </div>
+    
+    <!-- Produits -->
+    <div class="w-full lg:w-3/4">
+      {% section 'collection-products' %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Gestion des filtres mobiles
+    const filterToggle = document.querySelector('[data-filter-toggle]');
+    const filterDrawer = document.querySelector('[data-filter-drawer]');
+    
+    if (filterToggle && filterDrawer) {
+      filterToggle.addEventListener('click', function() {
+        filterDrawer.classList.toggle('translate-x-0');
+      });
+    }
+    
+    // Mise à jour des filtres via AJAX
+    document.querySelectorAll('[data-filter-form]').forEach(form => {
+      form.addEventListener('change', function() {
+        const formData = new FormData(form);
+        const searchParams = new URLSearchParams(formData).toString();
+        const url = `${window.location.pathname}?${searchParams}`;
+        
+        window.history.replaceState({}, '', url);
+        
+        fetch(url)
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const newDocument = parser.parseFromString(html, 'text/html');
+            const newProducts = newDocument.querySelector('[data-products-grid]');
+            const currentProducts = document.querySelector('[data-products-grid]');
+            
+            if (newProducts && currentProducts) {
+              currentProducts.innerHTML = newProducts.innerHTML;
+            }
+          });
+      });
+    });
+  });
+</script>

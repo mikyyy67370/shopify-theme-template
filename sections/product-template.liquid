@@ -1,0 +1,352 @@
+<div class="product-template" data-product-id="{{ product.id }}">
+  <div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- Product Gallery -->
+      <div class="product-gallery" data-aos="fade-right">
+        <div class="swiper-container gallery-main mb-4">
+          <div class="swiper-wrapper">
+            {% for image in product.images %}
+              <div class="swiper-slide aspect-w-1 aspect-h-1">
+                <img src="{{ image | img_url: '800x' }}"
+                     alt="{{ image.alt | escape }}"
+                     class="w-full h-full object-cover rounded-lg"
+                     data-zoom-image="{{ image | img_url: '1400x' }}">
+              </div>
+            {% endfor %}
+          </div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+        </div>
+        
+        <div class="swiper-container gallery-thumbs">
+          <div class="swiper-wrapper">
+            {% for image in product.images %}
+              <div class="swiper-slide aspect-w-1 aspect-h-1">
+                <img src="{{ image | img_url: '150x' }}"
+                     alt="{{ image.alt | escape }}"
+                     class="w-full h-full object-cover rounded-lg cursor-pointer">
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product Info -->
+      <div class="product-info" data-aos="fade-left">
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-6">
+          <a href="/" class="hover:text-primary">Home</a>
+          <span>/</span>
+          <a href="{{ product.collection.url }}" class="hover:text-primary">{{ product.collection.title }}</a>
+          <span>/</span>
+          <span class="text-gray-900">{{ product.title }}</span>
+        </nav>
+        
+        <!-- Product Title and Reviews -->
+        <h1 class="text-4xl font-bold mb-4">{{ product.title }}</h1>
+        <div class="flex items-center mb-6">
+          <div class="flex text-yellow-400">
+            <span class="sr-only">{{ product.metafields.reviews.rating }} out of 5 stars</span>
+            {% assign rating = product.metafields.reviews.rating | default: 5 %}
+            {% for i in (1..5) %}
+              {% if i <= rating %}
+                ★
+              {% else %}
+                ☆
+              {% endif %}
+            {% endfor %}
+          </div>
+          <span class="ml-2 text-sm text-gray-500">
+            ({{ product.metafields.reviews.rating_count | default: 0 }} reviews)
+          </span>
+        </div>
+        
+        <!-- Price -->
+        <div class="mb-6">
+          <div class="flex items-center space-x-4">
+            <span class="text-3xl font-bold" data-price>
+              {{ product.selected_or_first_available_variant.price | money }}
+            </span>
+            {% if product.compare_at_price_max > product.price %}
+              <span class="text-xl text-gray-500 line-through">
+                {{ product.compare_at_price_max | money }}
+              </span>
+              <span class="px-3 py-1 text-sm font-medium text-white bg-red-500 rounded-full">
+                Save {{ product.compare_at_price_max | minus: product.price | money }}
+              </span>
+            {% endif %}
+          </div>
+        </div>
+        
+        <!-- Variant Selector -->
+        {% unless product.has_only_default_variant %}
+          <div class="mb-6">
+            {% for option in product.options_with_values %}
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                  {{ option.name }}
+                </label>
+                <div class="flex flex-wrap gap-2">
+                  {% for value in option.values %}
+                    {% assign option_downcase = option.name | downcase %}
+                    <button
+                      class="variant-selector {% if option_downcase == 'color' %}color-selector{% else %}size-selector{% endif %} {% if forloop.first %}selected{% endif %}"
+                      data-option="{{ option.position }}"
+                      data-value="{{ value | escape }}"
+                      {% if option_downcase == 'color' %}
+                        style="background-color: {{ value | downcase }}"
+                      {% endif %}
+                    >
+                      {% if option_downcase == 'color' %}
+                        <span class="sr-only">{{ value }}</span>
+                      {% else %}
+                        {{ value }}
+                      {% endif %}
+                    </button>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endunless %}
+        
+        <!-- Add to Cart -->
+        <div class="mb-8">
+          <div class="flex items-center space-x-4">
+            <div class="quantity-selector flex items-center border rounded-full">
+              <button class="quantity-btn minus px-4 py-2">-</button>
+              <input type="number" 
+                     name="quantity" 
+                     value="1" 
+                     min="1"
+                     class="w-16 text-center focus:outline-none">
+              <button class="quantity-btn plus px-4 py-2">+</button>
+            </div>
+            
+            <button type="submit"
+                    name="add"
+                    class="flex-1 bg-primary text-white px-8 py-3 rounded-full font-medium hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transform hover:scale-105 transition-transform"
+                    {% unless product.available %}disabled{% endunless %}
+                    data-add-to-cart>
+              {% if product.available %}
+                Add to Cart
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+          </div>
+        </div>
+        
+        <!-- Fast Checkout Buttons -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          <button class="w-full px-6 py-3 bg-black text-white rounded-full flex items-center justify-center space-x-2 hover:bg-gray-900">
+            <img src="{{ 'shop-pay.svg' | asset_url }}" alt="Shop Pay" class="h-4">
+            <span>Buy now</span>
+          </button>
+          <button class="w-full px-6 py-3 bg-yellow-500 text-black rounded-full flex items-center justify-center space-x-2 hover:bg-yellow-400">
+            <img src="{{ 'paypal.svg' | asset_url }}" alt="PayPal" class="h-4">
+            <span>PayPal</span>
+          </button>
+        </div>
+        
+        <!-- Product Description -->
+        <div class="prose prose-sm max-w-none mb-8">
+          {{ product.description }}
+        </div>
+        
+        <!-- Features -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+          {% if product.available %}
+            <div class="flex items-center space-x-3">
+              <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
+              <span>In Stock</span>
+            </div>
+          {% endif %}
+          <div class="flex items-center space-x-3">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>Fast Shipping</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            <span>Secure Payment</span>
+          </div>
+          <div class="flex items-center space-x-3">
+            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+            </svg>
+            <span>Money-back Guarantee</span>
+          </div>
+        </div>
+        
+        <!-- Social Share -->
+        <div class="flex items-center space-x-4">
+          <span class="text-sm text-gray-500">Share:</span>
+          <a href="#" class="text-gray-400 hover:text-primary">
+            <span class="sr-only">Facebook</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.77 7.46H14.5v-1.9c0-.9.6-1.1 1-1.1h3V.5h-4.33C10.24.5 9.5 3.44 9.5 5.32v2.15h-3v4h3v12h5v-12h3.85l.42-4z"/>
+            </svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-primary">
+            <span class="sr-only">Twitter</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.611 1.794-1.574 2.163-2.723-.951.555-2.005.959-3.127 1.184-.896-.959-2.173-1.559-3.591-1.559-2.717 0-4.92 2.203-4.92 4.917 0 .39.045.765.127 1.124C7.691 8.094 4.066 6.13 1.64 3.161c-.427.722-.666 1.561-.666 2.475 0 1.71.87 3.213 2.188 4.096-.807-.026-1.566-.248-2.228-.616v.061c0 2.385 1.693 4.374 3.946 4.827-.413.111-.849.171-1.296.171-.314 0-.615-.03-.916-.086.631 1.953 2.445 3.377 4.604 3.417-1.68 1.319-3.809 2.105-6.102 2.105-.39 0-.779-.023-1.17-.067 2.189 1.394 4.768 2.209 7.557 2.209 9.054 0 13.999-7.496 13.999-13.986 0-.209 0-.42-.015-.63.961-.689 1.8-1.56 2.46-2.548l-.047-.02z"/>
+            </svg>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-primary">
+            <span class="sr-only">Pinterest</span>
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Template",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity_selector",
+      "label": "Show quantity selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_labels",
+      "label": "Show variant labels",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_buttons",
+      "label": "Show social sharing buttons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.variant-selector {
+  @apply px-4 py-2 border rounded-full cursor-pointer transition-colors;
+}
+
+.variant-selector.selected {
+  @apply border-primary bg-primary text-white;
+}
+
+.color-selector {
+  @apply w-8 h-8 rounded-full border-2 border-transparent;
+}
+
+.color-selector.selected {
+  @apply border-primary;
+}
+
+.size-selector {
+  @apply px-4 py-2 border rounded-full;
+}
+
+.size-selector.selected {
+  @apply border-primary bg-primary text-white;
+}
+
+.quantity-selector {
+  @apply border rounded-full overflow-hidden;
+}
+
+.quantity-btn {
+  @apply hover:bg-gray-100 transition-colors;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize thumbnail slider
+  const galleryThumbs = new Swiper('.gallery-thumbs', {
+    spaceBetween: 10,
+    slidesPerView: 4,
+    freeMode: true,
+    watchSlidesVisibility: true,
+    watchSlidesProgress: true,
+  });
+
+  // Initialize main slider
+  const galleryMain = new Swiper('.gallery-main', {
+    spaceBetween: 10,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    thumbs: {
+      swiper: galleryThumbs
+    }
+  });
+
+  // Initialize zoom
+  const zoomImages = document.querySelectorAll('[data-zoom-image]');
+  zoomImages.forEach(img => {
+    img.addEventListener('mousemove', function(e) {
+      const zoomer = e.currentTarget;
+      const offsetX = e.offsetX;
+      const offsetY = e.offsetY;
+      const x = (offsetX / zoomer.offsetWidth) * 100;
+      const y = (offsetY / zoomer.offsetHeight) * 100;
+      zoomer.style.backgroundPosition = x + '% ' + y + '%';
+    });
+  });
+
+  // Quantity selector
+  const quantityInput = document.querySelector('input[name="quantity"]');
+  const minusBtn = document.querySelector('.quantity-btn.minus');
+  const plusBtn = document.querySelector('.quantity-btn.plus');
+
+  minusBtn.addEventListener('click', () => {
+    const currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) {
+      quantityInput.value = currentValue - 1;
+    }
+  });
+
+  plusBtn.addEventListener('click', () => {
+    const currentValue = parseInt(quantityInput.value);
+    quantityInput.value = currentValue + 1;
+  });
+
+  // Variant selectors
+  const variantSelectors = document.querySelectorAll('.variant-selector');
+  variantSelectors.forEach(selector => {
+    selector.addEventListener('click', function() {
+      const option = this.dataset.option;
+      const siblings = document.querySelectorAll(`.variant-selector[data-option="${option}"]`);
+      siblings.forEach(sib => sib.classList.remove('selected'));
+      this.classList.add('selected');
+      updateVariantPrice();
+    });
+  });
+
+  function updateVariantPrice() {
+    // Add your variant price update logic here
+  }
+});
+</script>

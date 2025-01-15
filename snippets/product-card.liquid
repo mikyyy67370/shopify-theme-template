@@ -1,0 +1,116 @@
+{% comment %}
+    Renders a product card
+    Accepts:
+    - product: {Object} Product Liquid object
+    - show_vendor: {Boolean} Show the product's vendor (optional)
+    - media_aspect_ratio: {String} Image aspect ratio (optional)
+    - show_secondary_image: {Boolean} Show second image on hover (optional)
+    - add_image_padding: {Boolean} Add padding to image (optional)
+    - show_quick_view: {Boolean} Show quick view button (optional)
+{% endcomment %}
+
+{%- if product != blank -%}
+  <div class="group relative">
+    <div class="aspect-w-4 aspect-h-5 sm:aspect-w-3 sm:aspect-h-4 rounded-lg overflow-hidden bg-gray-100">
+      {%- if product.featured_media -%}
+        <img src="{{ product.featured_media | img_url: '500x' }}"
+             alt="{{ product.featured_media.alt | escape }}"
+             class="w-full h-full object-center object-cover group-hover:opacity-75"
+             loading="lazy"
+             width="{{ product.featured_media.width }}"
+             height="{{ product.featured_media.height }}">
+        
+        {%- if show_secondary_image and product.media[1] -%}
+          <img src="{{ product.media[1] | img_url: '500x' }}"
+               alt="{{ product.media[1].alt | escape }}"
+               class="w-full h-full object-center object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+               loading="lazy"
+               width="{{ product.media[1].width }}"
+               height="{{ product.media[1].height }}">
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-center object-cover' }}
+      {%- endif -%}
+
+      {%- if show_quick_view -%}
+        <button type="button"
+                class="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 bg-white bg-opacity-90 text-sm font-medium text-gray-900 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                onclick="quickView('{{ product.handle }}')">
+          Quick view
+        </button>
+      {%- endif -%}
+    </div>
+
+    <div class="mt-4 flex items-center justify-between text-base font-medium text-gray-900">
+      <h3>
+        <a href="{{ product.url }}">
+          <span aria-hidden="true" class="absolute inset-0"></span>
+          {{ product.title }}
+        </a>
+      </h3>
+    </div>
+
+    {%- if show_vendor -%}
+      <p class="mt-1 text-sm text-gray-500">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    <div class="mt-1 flex items-center justify-between">
+      <p class="text-sm font-medium text-gray-900">
+        {%- if product.price_varies -%}
+          <span class="text-gray-500">From </span>
+        {%- endif -%}
+        {{ product.price | money }}
+        
+        {%- if product.compare_at_price > product.price -%}
+          <span class="ml-2 text-sm text-gray-500 line-through">
+            {{ product.compare_at_price | money }}
+          </span>
+        {%- endif -%}
+      </p>
+
+      {%- if product.available -%}
+        {%- if product.variants.size > 1 -%}
+          <span class="text-sm text-gray-500">{{ product.variants.size }} variants</span>
+        {%- endif -%}
+      {%- else -%}
+        <span class="text-sm text-red-600">Sold out</span>
+      {%- endif -%}
+    </div>
+
+    {%- if product.available and product.variants.size == 1 -%}
+      <div class="mt-4">
+        <form method="post" action="/cart/add" class="w-full">
+          <input type="hidden" name="id" value="{{ product.first_available_variant.id }}">
+          <button type="submit"
+                  class="w-full bg-primary border border-transparent rounded-md py-2 px-8 flex items-center justify-center text-sm font-medium text-white hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+            Add to cart
+          </button>
+        </form>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% if show_quick_view %}
+  <script>
+    function quickView(handle) {
+      // Implement quick view functionality
+      fetch(`/products/${handle}?view=quick-view`)
+        .then(response => response.text())
+        .then(html => {
+          // Create modal and display product quick view
+          const modal = document.createElement('div');
+          modal.innerHTML = html;
+          document.body.appendChild(modal);
+          
+          // Add close functionality
+          const closeButton = modal.querySelector('.quick-view-close');
+          if (closeButton) {
+            closeButton.addEventListener('click', () => {
+              modal.remove();
+            });
+          }
+        });
+    }
+  </script>
+{% endif %}

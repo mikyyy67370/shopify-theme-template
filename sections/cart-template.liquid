@@ -1,0 +1,288 @@
+<div class="bg-white" x-data="{ cartOpen: false }">
+  <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-0">
+    <h1 class="text-3xl font-extrabold text-center tracking-tight text-gray-900 sm:text-4xl">
+      {{ 'cart.general.title' | t }}
+    </h1>
+
+    <form action="{{ routes.cart_url }}" method="post" novalidate class="mt-12">
+      {% if cart.item_count > 0 %}
+        <div class="space-y-8">
+          <div class="border-t border-b border-gray-200 divide-y divide-gray-200">
+            {%- for item in cart.items -%}
+              <div class="flex py-6 sm:py-10" data-cart-item="{{ item.key }}">
+                <div class="flex-shrink-0">
+                  <img
+                    src="{{ item.image | img_url: '200x' }}"
+                    alt="{{ item.title | escape }}"
+                    class="w-24 h-24 rounded-lg object-center object-cover sm:w-32 sm:h-32"
+                  >
+                </div>
+
+                <div class="relative ml-4 flex-1 flex flex-col justify-between sm:ml-6">
+                  <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                    <div>
+                      <div class="flex justify-between">
+                        <h3 class="text-sm">
+                          <a href="{{ item.url }}" class="font-medium text-gray-700 hover:text-gray-800">
+                            {{ item.product.title }}
+                          </a>
+                        </h3>
+                      </div>
+                      <div class="mt-1 flex text-sm">
+                        {%- if item.product.has_only_default_variant == false -%}
+                          <p class="text-gray-500">{{ item.variant.title }}</p>
+                        {%- endif -%}
+                      </div>
+                      <p class="mt-1 text-sm font-medium text-gray-900">{{ item.final_line_price | money }}</p>
+                    </div>
+
+                    <div class="mt-4 sm:mt-0 sm:pr-9">
+                      <label for="quantity-{{ forloop.index }}" class="sr-only">
+                        {{ 'cart.label.quantity' | t }}
+                      </label>
+                      <div class="flex items-center border rounded-md">
+                        <button
+                          type="button"
+                          class="p-2 text-gray-500 hover:text-gray-700"
+                          data-quantity-minus
+                        >
+                          <span class="sr-only">{{ 'cart.label.decrease' | t }}</span>
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                          </svg>
+                        </button>
+                        <input
+                          id="quantity-{{ forloop.index }}"
+                          type="number"
+                          name="updates[]"
+                          value="{{ item.quantity }}"
+                          min="0"
+                          class="w-16 text-center border-transparent focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                          data-quantity-input
+                        >
+                        <button
+                          type="button"
+                          class="p-2 text-gray-500 hover:text-gray-700"
+                          data-quantity-plus
+                        >
+                          <span class="sr-only">{{ 'cart.label.increase' | t }}</span>
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <div class="absolute top-0 right-0">
+                        <button
+                          type="button"
+                          class="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500"
+                          data-remove-item="{{ item.key }}"
+                        >
+                          <span class="sr-only">{{ 'cart.label.remove' | t }}</span>
+                          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+
+          <!-- Order summary -->
+          <div class="border-t border-gray-200 pt-8">
+            <div class="flex justify-between text-base font-medium text-gray-900">
+              <p>{{ 'cart.general.subtotal' | t }}</p>
+              <p>{{ cart.total_price | money }}</p>
+            </div>
+            <p class="mt-0.5 text-sm text-gray-500">
+              {{ 'cart.general.shipping_at_checkout' | t }}
+            </p>
+            <div class="mt-6">
+              <button
+                type="submit"
+                name="checkout"
+                class="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+              >
+                {{ 'cart.general.checkout' | t }}
+              </button>
+            </div>
+            <div class="mt-6 flex justify-center text-sm text-center text-gray-500">
+              <p>
+                {{ 'cart.general.or' | t }}
+                <a href="{{ routes.all_products_collection_url }}" class="text-primary-600 font-medium hover:text-primary-500">
+                  {{ 'cart.general.continue_shopping' | t }}
+                  <span aria-hidden="true"> &rarr;</span>
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="text-center">
+          <p class="text-gray-500">{{ 'cart.general.empty' | t }}</p>
+          <div class="mt-6">
+            <a
+              href="{{ routes.all_products_collection_url }}"
+              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+            >
+              {{ 'cart.general.continue_shopping' | t }}
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    </form>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_notes",
+      "label": "Enable order notes",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
+
+{% javascript %}
+document.addEventListener('DOMContentLoaded', () => {
+  // Quantity selectors
+  document.querySelectorAll('[data-quantity-input]').forEach(input => {
+    const minus = input.parentNode.querySelector('[data-quantity-minus]');
+    const plus = input.parentNode.querySelector('[data-quantity-plus]');
+    
+    minus.addEventListener('click', () => {
+      const value = parseInt(input.value) - 1;
+      input.value = value < 0 ? 0 : value;
+      input.dispatchEvent(new Event('change'));
+    });
+    
+    plus.addEventListener('click', () => {
+      input.value = parseInt(input.value) + 1;
+      input.dispatchEvent(new Event('change'));
+    });
+    
+    input.addEventListener('change', debounce(async () => {
+      const form = input.closest('form');
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch('/cart/update.js', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const cart = await response.json();
+        
+        // Update cart count and total
+        document.querySelectorAll('[data-cart-count]').forEach(el => {
+          el.textContent = cart.item_count;
+        });
+        
+        // Update line item price
+        const lineItem = input.closest('[data-cart-item]');
+        const priceEl = lineItem.querySelector('.text-gray-900');
+        const item = cart.items.find(item => item.key === lineItem.dataset.cartItem);
+        if (item && priceEl) {
+          priceEl.textContent = Shopify.formatMoney(item.final_line_price);
+        }
+        
+        // Update cart total
+        const totalEl = document.querySelector('[data-cart-total]');
+        if (totalEl) {
+          totalEl.textContent = Shopify.formatMoney(cart.total_price);
+        }
+      } catch (error) {
+        console.error('Error updating cart:', error);
+      }
+    }, 500));
+  });
+  
+  // Remove items
+  document.querySelectorAll('[data-remove-item]').forEach(button => {
+    button.addEventListener('click', async () => {
+      const key = button.dataset.removeItem;
+      const lineItem = button.closest('[data-cart-item]');
+      
+      try {
+        await fetch('/cart/change.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: key,
+            quantity: 0
+          })
+        });
+        
+        lineItem.remove();
+        
+        // Update cart
+        const response = await fetch('/cart.js');
+        const cart = await response.json();
+        
+        // Update cart count
+        document.querySelectorAll('[data-cart-count]').forEach(el => {
+          el.textContent = cart.item_count;
+        });
+        
+        // Update cart total
+        const totalEl = document.querySelector('[data-cart-total]');
+        if (totalEl) {
+          totalEl.textContent = Shopify.formatMoney(cart.total_price);
+        }
+        
+        // Show empty cart message if no items left
+        if (cart.item_count === 0) {
+          const form = document.querySelector('form');
+          form.innerHTML = `
+            <div class="text-center">
+              <p class="text-gray-500">{{ 'cart.general.empty' | t }}</p>
+              <div class="mt-6">
+                <a
+                  href="{{ routes.all_products_collection_url }}"
+                  class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                >
+                  {{ 'cart.general.continue_shopping' | t }}
+                </a>
+              </div>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error removing item:', error);
+      }
+    });
+  });
+});
+
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+{% endjavascript %}

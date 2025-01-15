@@ -1,0 +1,232 @@
+<div class="social-proof py-16 bg-gray-50" data-aos="fade-up">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12">{{ section.settings.title }}</h2>
+    
+    <div class="stats-container grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      {% for block in section.blocks %}
+        {% if block.type == 'stat' %}
+          <div class="stat-item text-center" data-aos="fade-up" data-aos-delay="{{ forloop.index | times: 100 }}">
+            <div class="text-4xl font-bold text-primary mb-2">{{ block.settings.number }}</div>
+            <div class="text-gray-600">{{ block.settings.label }}</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    <div class="testimonials-slider relative" data-aos="fade-up">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            {% if block.type == 'testimonial' %}
+              <div class="swiper-slide">
+                <div class="bg-white p-8 rounded-lg shadow-lg">
+                  <div class="flex items-center mb-4">
+                    {% if block.settings.customer_image %}
+                      <img src="{{ block.settings.customer_image | img_url: '100x100', crop: 'center' }}"
+                           alt="{{ block.settings.customer_name }}"
+                           class="w-12 h-12 rounded-full object-cover">
+                    {% endif %}
+                    <div class="ml-4">
+                      <div class="font-medium">{{ block.settings.customer_name }}</div>
+                      <div class="text-sm text-gray-500">{{ block.settings.customer_title }}</div>
+                    </div>
+                  </div>
+                  <div class="text-yellow-400 mb-4">★★★★★</div>
+                  <p class="text-gray-600">{{ block.settings.testimonial }}</p>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+    
+    <div class="brands-container mt-16">
+      <h3 class="text-2xl font-bold text-center mb-8">{{ section.settings.brands_title }}</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+        {% for block in section.blocks %}
+          {% if block.type == 'brand' %}
+            <div class="brand-item" data-aos="fade-up" data-aos-delay="{{ forloop.index | times: 50 }}">
+              <img src="{{ block.settings.brand_logo | img_url: '200x' }}"
+                   alt="{{ block.settings.brand_name }}"
+                   class="max-w-full h-auto mx-auto filter grayscale hover:grayscale-0 transition-all">
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Social Proof",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "What Our Customers Say"
+    },
+    {
+      "type": "text",
+      "id": "brands_title",
+      "label": "Brands Title",
+      "default": "Trusted By"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Statistic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "1000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Happy Customers"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "customer_image",
+          "label": "Customer Image"
+        },
+        {
+          "type": "text",
+          "id": "customer_name",
+          "label": "Customer Name",
+          "default": "John Doe"
+        },
+        {
+          "type": "text",
+          "id": "customer_title",
+          "label": "Customer Title",
+          "default": "Verified Buyer"
+        },
+        {
+          "type": "textarea",
+          "id": "testimonial",
+          "label": "Testimonial",
+          "default": "Amazing products and great service! Will definitely buy again."
+        }
+      ]
+    },
+    {
+      "type": "brand",
+      "name": "Brand Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "brand_logo",
+          "label": "Brand Logo"
+        },
+        {
+          "type": "text",
+          "id": "brand_name",
+          "label": "Brand Name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social Proof",
+      "blocks": [
+        {
+          "type": "stat"
+        },
+        {
+          "type": "stat"
+        },
+        {
+          "type": "stat"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        },
+        {
+          "type": "brand"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.swiper-container {
+  padding: 20px 0;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  color: theme('colors.primary');
+}
+
+.swiper-pagination-bullet-active {
+  background: theme('colors.primary');
+}
+
+.testimonials-slider {
+  overflow: hidden;
+}
+</style>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  new Swiper('.swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    autoplay: {
+      delay: 5000,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+    },
+  });
+});
+</script>

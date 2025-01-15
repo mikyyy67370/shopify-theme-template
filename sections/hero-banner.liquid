@@ -1,0 +1,108 @@
+{{ ... }}
+<div class="hero-banner relative overflow-hidden" data-aos="fade-up">
+  <div class="hero-content container mx-auto px-4 py-20 flex flex-col items-center text-center">
+    <h1 class="text-5xl font-bold mb-6 animate-slide-up" {{ block.shopify_attributes }}>
+      {{ section.settings.heading | escape }}
+    </h1>
+    <p class="text-xl mb-8 max-w-2xl animate-slide-up-delay" {{ block.shopify_attributes }}>
+      {{ section.settings.subtext }}
+    </p>
+    <a href="{{ section.settings.button_link }}" 
+       class="primary-button animate-slide-up-delay-2 hover:scale-105 transition-transform">
+      {{ section.settings.button_text }}
+    </a>
+  </div>
+  {% if section.settings.show_background_image %}
+    <div class="absolute inset-0 -z-10">
+      {%- if section.settings.background_image != blank -%}
+        {{ section.settings.background_image | image_url: width: 2000 | image_tag:
+          loading: 'lazy',
+          class: 'w-full h-full object-cover',
+          alt: section.settings.background_image.alt | escape
+        }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'w-full h-full object-cover' }}
+      {%- endif -%}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome to Our Store"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Discover our unique collection of products"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_background_image",
+      "label": "Show background image",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "category": "Hero Sections"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+.animate-slide-up {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease forwards;
+}
+
+.animate-slide-up-delay {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease forwards 0.2s;
+}
+
+.animate-slide-up-delay-2 {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease forwards 0.4s;
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.primary-button {
+  @apply inline-block px-8 py-3 bg-primary text-white rounded-full font-semibold;
+}
+</style>
+{{ ... }}

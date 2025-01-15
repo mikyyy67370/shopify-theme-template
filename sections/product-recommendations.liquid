@@ -1,0 +1,121 @@
+<div class="product-recommendations py-16 bg-gray-50" data-aos="fade-up">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12">{{ section.settings.title }}</h2>
+    
+    <div class="relative">
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          {%- for product in recommendations.products -%}
+            <div class="swiper-slide">
+              <div class="product-card bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <a href="{{ product.url }}" class="block relative overflow-hidden group">
+                  <div class="aspect-w-1 aspect-h-1">
+                    {{ product.featured_image | image_url: width: 500 | image_tag:
+                      loading: 'lazy',
+                      class: 'w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500'
+                    }}
+                  </div>
+                  {% if product.compare_at_price > product.price %}
+                    <span class="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm">
+                      Sale
+                    </span>
+                  {% endif %}
+                </a>
+                
+                <div class="p-4">
+                  <h3 class="text-lg font-medium mb-2">
+                    <a href="{{ product.url }}" class="hover:text-primary">{{ product.title }}</a>
+                  </h3>
+                  
+                  <div class="flex items-center justify-between mb-2">
+                    <div class="flex items-center space-x-2">
+                      <span class="font-bold">{{ product.price | money }}</span>
+                      {% if product.compare_at_price > product.price %}
+                        <span class="text-sm text-gray-500 line-through">
+                          {{ product.compare_at_price | money }}
+                        </span>
+                      {% endif %}
+                    </div>
+                    
+                    <div class="flex text-yellow-400 text-sm">
+                      <span class="sr-only">{{ product.metafields.reviews.rating }} out of 5 stars</span>
+                      {% assign rating = product.metafields.reviews.rating | default: 5 %}
+                      {% for i in (1..5) %}
+                        {% if i <= rating %}
+                          ★
+                        {% else %}
+                          ☆
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  
+                  <button class="w-full bg-primary text-white py-2 rounded-full hover:bg-primary-dark transition-colors"
+                          onclick="addToCart('{{ product.variant.id }}')">
+                    Quick Add
+                  </button>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+      <button class="swiper-button-prev absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-3 hover:bg-primary hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      
+      <button class="swiper-button-next absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white rounded-full shadow-md p-3 hover:bg-primary hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Maximum products to show"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  new Swiper('.swiper-container', {
+    slidesPerView: 1,
+    spaceBetween: 20,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 4,
+      },
+    },
+  });
+});
+</script>

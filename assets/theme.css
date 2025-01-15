@@ -1,0 +1,310 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS personnalisées */
+:root {
+  --color-primary: #4F46E5;
+  --color-primary-dark: #4338CA;
+  --color-secondary: #10B981;
+  --color-secondary-dark: #059669;
+  --color-accent: #F59E0B;
+  --color-accent-dark: #D97706;
+  
+  --color-text: #111827;
+  --color-text-light: #6B7280;
+  --color-background: #FFFFFF;
+  --color-background-alt: #F3F4F6;
+  
+  --font-heading: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+/* Styles de base */
+@layer base {
+  html {
+    @apply antialiased;
+  }
+
+  body {
+    @apply font-body text-gray-900 bg-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  a {
+    @apply text-primary hover:text-primary-dark transition-colors duration-200;
+  }
+
+  button {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+  }
+}
+
+/* Composants */
+@layer components {
+  /* Boutons */
+  .btn {
+    @apply inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-white hover:bg-primary-dark focus:ring-primary;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-white hover:bg-secondary-dark focus:ring-secondary;
+  }
+
+  .btn-outline {
+    @apply btn border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:ring-primary;
+  }
+
+  /* Formulaires */
+  .form-input {
+    @apply block w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary sm:text-sm;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700;
+  }
+
+  .form-error {
+    @apply mt-2 text-sm text-red-600;
+  }
+
+  /* Cartes */
+  .card {
+    @apply bg-white overflow-hidden shadow-sm rounded-lg;
+  }
+
+  .card-header {
+    @apply px-4 py-5 border-b border-gray-200 sm:px-6;
+  }
+
+  .card-body {
+    @apply px-4 py-5 sm:p-6;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-error {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply text-gray-500 hover:text-gray-900 px-3 py-2 text-sm font-medium;
+  }
+
+  .nav-link-active {
+    @apply text-gray-900 font-semibold;
+  }
+
+  /* Grilles de produits */
+  .product-grid {
+    @apply grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8;
+  }
+}
+
+/* Utilitaires */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Classes d'animation */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInFromRight 0.3s ease-in-out;
+}
+
+.animate-slide-in-bottom {
+  animation: slideInFromBottom 0.3s ease-in-out;
+}
+
+/* Styles spécifiques pour le panier */
+.cart-drawer {
+  @apply fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-xl transform transition-transform duration-300 ease-in-out;
+}
+
+.cart-drawer.open {
+  @apply translate-x-0;
+}
+
+.cart-drawer.closed {
+  @apply translate-x-full;
+}
+
+/* Styles pour le menu mobile */
+.mobile-menu {
+  @apply fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-300;
+}
+
+.mobile-menu-panel {
+  @apply fixed inset-y-0 left-0 w-full max-w-sm bg-white shadow-xl transform transition-transform duration-300 ease-in-out;
+}
+
+.mobile-menu.open .mobile-menu-panel {
+  @apply translate-x-0;
+}
+
+.mobile-menu.closed .mobile-menu-panel {
+  @apply -translate-x-full;
+}
+
+/* Styles pour les notifications */
+.toast-notification {
+  @apply fixed bottom-4 right-4 max-w-md bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5;
+}
+
+/* Styles pour les filtres de collection */
+.collection-filters {
+  @apply space-y-4;
+}
+
+.filter-group {
+  @apply border-t border-gray-200 pt-4;
+}
+
+.filter-group-title {
+  @apply text-sm font-medium text-gray-900;
+}
+
+.filter-options {
+  @apply space-y-2 mt-2;
+}
+
+/* Styles pour la pagination */
+.pagination {
+  @apply flex justify-center space-x-1;
+}
+
+.pagination-item {
+  @apply px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50;
+}
+
+.pagination-item-active {
+  @apply text-white bg-primary border-primary hover:bg-primary-dark;
+}
+
+/* Styles pour les formulaires de compte */
+.account-form {
+  @apply space-y-6;
+}
+
+.form-section {
+  @apply grid grid-cols-6 gap-6;
+}
+
+/* Media Queries */
+@media (max-width: 640px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
+/* Styles d'impression */
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+
+/* Styles pour l'accessibilité */
+.sr-only {
+  @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+}
+
+.focus-visible {
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+}
+
+/* Styles pour le mode sombre */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-text: #F9FAFB;
+    --color-text-light: #D1D5DB;
+    --color-background: #111827;
+    --color-background-alt: #1F2937;
+  }
+
+  .dark-mode {
+    @apply bg-gray-900 text-white;
+  }
+
+  .card.dark-mode {
+    @apply bg-gray-800 border-gray-700;
+  }
+
+  .nav-link.dark-mode {
+    @apply text-gray-300 hover:text-white;
+  }
+}

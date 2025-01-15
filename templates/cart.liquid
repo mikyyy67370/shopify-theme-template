@@ -1,0 +1,17 @@
+{% section 'cart-template' %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Update quantity when changed
+    document.querySelectorAll('.cart-item-qty').forEach(input => {
+      input.addEventListener('change', function() {
+        const key = this.dataset.key;
+        const quantity = parseInt(this.value);
+        
+        if (quantity >= 0) {
+          updateCartItem(key, quantity);
+        }
+      });
+    });
+  });
+</script>
