@@ -14,4 +14,4 @@ git commit -m "Initial commit"
 git remote add origin https://github.com/mikyyy67370/shopify-theme-template.git
 
 # Pousser vers GitHub
-git push -u origin main
+git push -u origin master
