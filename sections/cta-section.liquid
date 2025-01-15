@@ -1,0 +1,168 @@
+{% comment %}
+  Call-to-Action Section
+  ------------------------------------------------------------------------------
+  Final conversion section with animation
+{% endcomment %}
+
+<div 
+  class="relative bg-primary" 
+  x-data="{ isVisible: false }" 
+  x-intersect="isVisible = true"
+>
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 opacity-10">
+    <svg class="h-full w-full" viewBox="0 0 80 80" fill="none">
+      <g clip-path="url(#clip0)">
+        <path d="M80 0H0V80H80V0Z" fill="white"/>
+        <path d="M12.3178 19.1907C20.0864 19.1907 26.3857 12.8914 26.3857 5.12285C26.3857 -2.64573 20.0864 -8.945 12.3178 -8.945C4.54922 -8.945 -1.75 -2.64573 -1.75 5.12285C-1.75 12.8914 4.54922 19.1907 12.3178 19.1907Z" fill="white"/>
+        <path d="M52.3178 19.1907C60.0864 19.1907 66.3857 12.8914 66.3857 5.12285C66.3857 -2.64573 60.0864 -8.945 52.3178 -8.945C44.5492 -8.945 38.25 -2.64573 38.25 5.12285C38.25 12.8914 44.5492 19.1907 52.3178 19.1907Z" fill="white"/>
+        <path d="M32.3178 39.1907C40.0864 39.1907 46.3857 32.8914 46.3857 25.1229C46.3857 17.3543 40.0864 11.055 32.3178 11.055C24.5492 11.055 18.25 17.3543 18.25 25.1229C18.25 32.8914 24.5492 39.1907 32.3178 39.1907Z" fill="white"/>
+        <path d="M72.3178 39.1907C80.0864 39.1907 86.3857 32.8914 86.3857 25.1229C86.3857 17.3543 80.0864 11.055 72.3178 11.055C64.5492 11.055 58.25 17.3543 58.25 25.1229C58.25 32.8914 64.5492 39.1907 72.3178 39.1907Z" fill="white"/>
+        <path d="M12.3178 59.1907C20.0864 59.1907 26.3857 52.8914 26.3857 45.1229C26.3857 37.3543 20.0864 31.055 12.3178 31.055C4.54922 31.055 -1.75 37.3543 -1.75 45.1229C-1.75 52.8914 4.54922 59.1907 12.3178 59.1907Z" fill="white"/>
+        <path d="M52.3178 59.1907C60.0864 59.1907 66.3857 52.8914 66.3857 45.1229C66.3857 37.3543 60.0864 31.055 52.3178 31.055C44.5492 31.055 38.25 37.3543 38.25 45.1229C38.25 52.8914 44.5492 59.1907 52.3178 59.1907Z" fill="white"/>
+        <path d="M32.3178 79.1907C40.0864 79.1907 46.3857 72.8914 46.3857 65.1229C46.3857 57.3543 40.0864 51.055 32.3178 51.055C24.5492 51.055 18.25 57.3543 18.25 65.1229C18.25 72.8914 24.5492 79.1907 32.3178 79.1907Z" fill="white"/>
+        <path d="M72.3178 79.1907C80.0864 79.1907 86.3857 72.8914 86.3857 65.1229C86.3857 57.3543 80.0864 51.055 72.3178 51.055C64.5492 51.055 58.25 57.3543 58.25 65.1229C58.25 72.8914 64.5492 79.1907 72.3178 79.1907Z" fill="white"/>
+      </g>
+      <defs>
+        <clipPath id="clip0">
+          <rect width="80" height="80" fill="white"/>
+        </clipPath>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="relative mx-auto max-w-7xl py-24 px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <!-- Title with Animation -->
+      <h2 
+        class="text-4xl font-bold tracking-tight text-white md:text-5xl"
+        x-show="isVisible"
+        x-transition:enter="transition ease-out duration-1000"
+        x-transition:enter-start="opacity-0 transform -translate-y-4"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+      >
+        {{ section.settings.title | default: "Prêt à transformer votre routine bien-être ?" }}
+      </h2>
+
+      <!-- Subtitle with Animation -->
+      <p 
+        class="mx-auto mt-6 max-w-2xl text-lg text-white/80"
+        x-show="isVisible"
+        x-transition:enter="transition ease-out duration-1000 delay-300"
+        x-transition:enter-start="opacity-0 transform -translate-y-4"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+      >
+        {{ section.settings.subtitle | default: "Commencez dès aujourd'hui avec notre offre spéciale de lancement" }}
+      </p>
+
+      <!-- Price Display with Animation -->
+      <div 
+        class="mt-8"
+        x-show="isVisible"
+        x-transition:enter="transition ease-out duration-1000 delay-500"
+        x-transition:enter-start="opacity-0 transform -translate-y-4"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+      >
+        <span class="text-5xl font-bold text-white">{{ section.settings.price | default: "99€" }}</span>
+        <span class="text-xl text-white/80">{{ section.settings.price_suffix | default: " seulement" }}</span>
+      </div>
+
+      <!-- CTA Button with Animation -->
+      <div 
+        class="mt-10"
+        x-show="isVisible"
+        x-transition:enter="transition ease-out duration-1000 delay-700"
+        x-transition:enter-start="opacity-0 transform -translate-y-4"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+      >
+        <a
+          href="{{ section.settings.button_link | default: '/products' }}"
+          class="inline-flex items-center justify-center rounded-md border border-transparent bg-white px-8 py-4 text-base font-medium text-primary hover:bg-gray-100 transform hover:scale-105 transition-all duration-300"
+        >
+          {{ section.settings.button_text | default: "Commander Maintenant" }}
+          <svg class="ml-2 -mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Trust Elements with Animation -->
+      <div 
+        class="mt-12 flex justify-center space-x-6 text-sm text-white/80"
+        x-show="isVisible"
+        x-transition:enter="transition ease-out duration-1000 delay-900"
+        x-transition:enter-start="opacity-0 transform -translate-y-4"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+      >
+        <div class="flex items-center">
+          <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          Garantie 30 jours
+        </div>
+        <div class="flex items-center">
+          <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Paiement sécurisé
+        </div>
+        <div class="flex items-center">
+          <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8 4-8-4V5l8 4 8-4v2z"/>
+          </svg>
+          Livraison offerte
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "CTA Section",
+  "tag": "section",
+  "class": "cta-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Prêt à transformer votre routine bien-être ?"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Commencez dès aujourd'hui avec notre offre spéciale de lancement"
+    },
+    {
+      "type": "text",
+      "id": "price",
+      "label": "Price",
+      "default": "99€"
+    },
+    {
+      "type": "text",
+      "id": "price_suffix",
+      "label": "Price Suffix",
+      "default": " seulement"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Commander Maintenant"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "CTA Section"
+    }
+  ]
+}
+{% endschema %}

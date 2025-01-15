@@ -1,0 +1,124 @@
+{% comment %}
+  Testimonials Slider Section
+  ------------------------------------------------------------------------------
+  Customer testimonials with animated slider
+{% endcomment %}
+
+<div class="bg-white py-16 sm:py-24" x-data="{ currentSlide: 0 }">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-12">
+        {{ section.settings.title | default: "Ce que nos clients disent" }}
+      </h2>
+    </div>
+
+    <div class="relative" x-data="{ testimonials: [
+      {
+        name: 'Sophie Martin',
+        role: 'Utilisatrice depuis 6 mois',
+        image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100',
+        quote: 'Cette balance connectée a changé ma façon de suivre ma santé. L\'application est intuitive et les mesures sont très précises.'
+      },
+      {
+        name: 'Thomas Dubois',
+        role: 'Utilisateur depuis 1 an',
+        image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100',
+        quote: 'Excellent produit ! La synchronisation avec mon téléphone est parfaite et le design est très élégant.'
+      },
+      {
+        name: 'Marie Petit',
+        role: 'Utilisatrice depuis 3 mois',
+        image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=100',
+        quote: 'Service client exceptionnel et livraison rapide. La balance est facile à configurer et les fonctionnalités sont nombreuses.'
+      }
+    ] }">
+      <!-- Testimonials Slider -->
+      <div class="overflow-hidden">
+        <div 
+          class="flex transition-transform duration-500 ease-out"
+          :style="'transform: translateX(-' + (currentSlide * 100) + '%)'"
+        >
+          <template x-for="(testimonial, index) in testimonials" :key="index">
+            <div class="w-full flex-shrink-0 px-4">
+              <div class="mx-auto max-w-2xl">
+                <div class="relative rounded-2xl bg-white p-8 shadow-lg">
+                  <div class="absolute -top-4 -right-4">
+                    <svg class="h-8 w-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                    </svg>
+                  </div>
+                  <div class="relative">
+                    <div class="flex items-center">
+                      <img 
+                        :src="testimonial.image" 
+                        :alt="testimonial.name"
+                        class="h-12 w-12 rounded-full object-cover"
+                      >
+                      <div class="ml-4">
+                        <div class="text-base font-medium text-gray-900" x-text="testimonial.name"></div>
+                        <div class="text-sm text-gray-500" x-text="testimonial.role"></div>
+                      </div>
+                    </div>
+                    <div class="mt-4 text-base text-gray-500" x-text="testimonial.quote"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="absolute inset-0 flex items-center justify-between px-4">
+        <button 
+          @click="currentSlide = (currentSlide - 1 + testimonials.length) % testimonials.length"
+          class="rounded-full bg-white/80 p-2 text-gray-800 shadow-lg hover:bg-white"
+        >
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+          </svg>
+        </button>
+        <button 
+          @click="currentSlide = (currentSlide + 1) % testimonials.length"
+          class="rounded-full bg-white/80 p-2 text-gray-800 shadow-lg hover:bg-white"
+        >
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Dots Navigation -->
+      <div class="mt-8 flex justify-center space-x-2">
+        <template x-for="(testimonial, index) in testimonials" :key="index">
+          <button 
+            @click="currentSlide = index"
+            class="h-2 w-2 rounded-full transition-colors duration-200"
+            :class="currentSlide === index ? 'bg-primary' : 'bg-gray-300'"
+          ></button>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Testimonials Slider",
+  "tag": "section",
+  "class": "testimonials-slider-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Ce que nos clients disent"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials Slider"
+    }
+  ]
+}
+{% endschema %}
